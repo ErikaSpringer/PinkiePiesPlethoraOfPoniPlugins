@@ -1,0 +1,13 @@
+main: com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane
+name: PinkiePiesPlethoraOfPoniPlugins
+author: CorrieKay
+version: 0.1
+commands:
+    afk:
+        description: toggles manual afk
+        usage: /afk toggles
+        permission: pppopp.afk
+        permission-message: "You cant do this :c"
+permissions:
+    pppopp.afk:
+        default: false
