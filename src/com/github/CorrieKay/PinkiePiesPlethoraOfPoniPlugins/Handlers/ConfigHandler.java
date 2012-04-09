@@ -17,93 +17,86 @@ import org.bukkit.entity.Player;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSElements;
 
-/**
- * This is the configuration handler. YES it will be an object. Bite me andrew.
- * 
- * anyways, this configuration handler is to be used for getting PLAYER CONFIGURATIONS ONLY
- * 
- * also, im using it as an object just in case other plugins need to access it.
- * @author Corrie
- *
- */
+@SuppressWarnings("unused")
 public class ConfigHandler {
 	Mane instance;
 	public ConfigHandler(Mane instance){
 		this.instance = instance;
 	}
-	public FileConfiguration getConfig(Player player){ // returns a players configuration file. returns null if it doesnt exist.
-		FileConfiguration config;
-		File file = new File(instance.getDataFolder()+"\\players\\"+player.getName()+".yml");
+	/**
+	 * Player configuration functions
+	 */
+	public FileConfiguration getPlayerConfig(Player player){
+		return getPlayerConfig(player.getName());
+	}
+	public FileConfiguration getPlayerConfig(String name){
+		FileConfiguration config = null;
+		File file = new File(instance.getDataFolder()+File.separator+"players"+File.separator+name+".yml");
 		if(file.exists()){
 			config = YamlConfiguration.loadConfiguration(file);
-		} else {
-			config = null;
 		}
 		return config;
 	}
-	public FileConfiguration getConfig(String player){ // returns a configuration by string (player name) used for grabbing offline player configs
-		FileConfiguration config;
-		File file = new File(instance.getDataFolder()+"\\players\\"+player+".yml");
-		if(file.exists()){
-			config = YamlConfiguration.loadConfiguration(file);
-		} else {
-			config = null;
-		}
-		return config;
-	}
-	public FileConfiguration getElement(PSElements element){
-			return YamlConfiguration.loadConfiguration(new File(instance.getDataFolder()+"\\"+element.name().toLowerCase()+".yml"));
-	}
-	
-	public void saveElement(FileConfiguration config, PSElements element){
+	public void savePlayerConfig(FileConfiguration config){
+		File file = new File(instance.getDataFolder()+File.separator+"players"+File.separator+config.getString("name")+".yml");
 		try {
-			config.save(new File(instance.getDataFolder()+"\\"+element.toString().toLowerCase()+".yml"));
+			config.save(file);
+			return;
 		} catch (IOException e) {
-			Bukkit.getLogger().severe("[PonySentials] could not save the configuration file");
+			Bukkit.getLogger().severe("[PPPOPP] IO EXCEPTION: unable to save Player Configuration!");
+			e.printStackTrace();
+			return;
 		}
 	}
-	
-	public void saveConfig(FileConfiguration config){ // saves a player configuration file.
-		File file = new File(instance.getDataFolder()+"\\players\\"+config.getString("name")+".yml");
+	/**
+	 * Server configuration functions
+	 */
+	public FileConfiguration getServerConfig(PSElements element){
+		FileConfiguration config = null;
+		File file = new File(instance.getDataFolder()+File.separator+element.name().toLowerCase()+".yml");
+		if(file.exists()){
+			config = YamlConfiguration.loadConfiguration(file);
+		}
+		return config;
+	}
+	public void saveServerConfig(FileConfiguration config, PSElements element){
+		File file = new File(instance.getDataFolder()+File.separator+element.name().toLowerCase()+".yml");
 		try {
 			config.save(file);
 		} catch (IOException e) {
-			Bukkit.getLogger().severe("[PonySentials] could not save the configuration file to "+file);
+			Bukkit.getLogger().severe("[PPPOPP] IO EXCEPTION: unable to save Server Configuration!");
+			e.printStackTrace();
 		}
 	}
-	public boolean createNewPlayerConfig(Player player){//creates a new configuration file for a player
-		boolean hasPlayed = false;
-		File file = new File(instance.getDataFolder()+"\\players\\"+player.getName()+".yml");
+	/**
+	 * Create new Player Config
+	 */
+	public FileConfiguration createNewPlayerConfig(Player player){
+		File file = new File(instance.getDataFolder()+File.separator+"players"+File.separator+player.getName()+".yml");
+		File folders = new File(instance.getDataFolder()+File.separator+"players");
+		if(!folders.exists()){
+			folders.mkdirs();
+		}
 		try {
 			file.createNewFile();
-		} catch (IOException e) {}
-		FileConfiguration config = getConfig(player);
-		List<String> ipAddys = new ArrayList<String>();
-		config.set("name",player.getName());
-		config.set("online", true);
-		config.set("muted",false);
-		config.set("god",false);
-		config.set("afk",false);
-		config.set("invisible",false);
-		config.set("viewingInventory", false);
-		config.set("nickname", player.getName());
-		ipAddys.add(player.getAddress().toString().substring(1,player.getAddress().toString().indexOf(":")));
-		config.set("ipAddress",ipAddys);
-		config.set("ban.banned", false);
-		config.createSection("ban.banReason");
-		if (!player.hasPlayedBefore()) {
-			Bukkit.getLogger().info("they havnt played before!");
-			config.set("firstLogon", getSystemDate());
-		} else {
-			Bukkit.getLogger().info("they have played before!");
-			config.set("firstLogon",getDateFromLong(player.getFirstPlayed()));
-			hasPlayed = true;
+		} catch (IOException e) {
+			Bukkit.getLogger().severe("[PPPOPP] IO EXCEPTION: unable to create Player Configuration!");
+			e.printStackTrace();
+			return null;
 		}
-		config.set("lastLogon",getSystemDate());
-		config.set("lastLogout", "N/A");
-		config.createSection("inventory");
-		saveConfig(config);
-		return hasPlayed;
+		FileConfiguration config = YamlConfiguration.loadConfiguration(instance.getResource("playerconfig.yml"));
+		config.set("name", player.getName());
+		config.set("nickname", player.getDisplayName());
+        if (!player.hasPlayedBefore()) {
+            config.set("firstLogon", getSystemDate());
+        } else {
+            config.set("firstLogon",getDateFromLong(player.getFirstPlayed()));
+        }
+        ArrayList<String> ip = new ArrayList<String>();
+        ip.add(player.getAddress().toString().substring(1,player.getAddress().toString().indexOf(":")));
+        config.set("ipAddress", ip);
+		savePlayerConfig(config);
+		return config;
 	}	
 	public String getSystemDate(){
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

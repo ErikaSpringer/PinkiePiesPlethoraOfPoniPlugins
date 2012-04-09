@@ -10,15 +10,23 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.AFKhandler;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.ConfigHandler;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.JoinHandler;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.QuitHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSJoinEvent;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
 
 public class Mane extends JavaPlugin implements Listener{
-	AFKhandler afk = new AFKhandler();
+	private final AFKhandler afk = new AFKhandler();
+	private final ConfigHandler ch = new ConfigHandler(this);
+	private final JoinHandler jh = new JoinHandler(this);
+	private final QuitHandler qh = new QuitHandler(this);
 	
 	public void onEnable(){
 		PluginManager pm = Bukkit.getPluginManager();
 		afk.initialize(this);
+		pm.registerEvents(jh, this);
+		pm.registerEvents(qh, this);
 		pm.registerEvents(this, this);
 		pm.registerEvents(afk, this);
 		getCommand("afk").setExecutor(afk);
@@ -26,7 +34,7 @@ public class Mane extends JavaPlugin implements Listener{
 	public void onDisable(){
 		Bukkit.getScheduler().cancelTasks(this);
 	}
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event){
 		if (!(event instanceof PSJoinEvent)) {
 			PSJoinEvent psjoin = new PSJoinEvent(event.getPlayer(),event.getJoinMessage(), true);
@@ -34,12 +42,18 @@ public class Mane extends JavaPlugin implements Listener{
 			event.setJoinMessage(psjoin.getJoinMessage());
 		}
 	}
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event){
 		if (!(event instanceof PSQuitEvent)) {
 			PSQuitEvent psquit = new PSQuitEvent(event.getPlayer(),event.getQuitMessage(), true);
 			Bukkit.getPluginManager().callEvent(psquit);
 			event.setQuitMessage(psquit.getQuitMessage());
 		}
+	}
+	public ConfigHandler getConfigHandler() {
+		return ch;
+	}
+	public AFKhandler getAfkHandler(){
+		return afk;
 	}
 }
