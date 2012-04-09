@@ -28,14 +28,18 @@ public class Mane extends JavaPlugin implements Listener{
 	}
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerJoinEvent event){
-		PSJoinEvent psjoin = new PSJoinEvent(event.getPlayer(), event.getJoinMessage(), true);
-		Bukkit.getPluginManager().callEvent(psjoin);
-		event.setJoinMessage(psjoin.getJoinMessage());
+		if (!(event instanceof PSJoinEvent)) {
+			PSJoinEvent psjoin = new PSJoinEvent(event.getPlayer(),event.getJoinMessage(), true);
+			Bukkit.getPluginManager().callEvent(psjoin);
+			event.setJoinMessage(psjoin.getJoinMessage());
+		}
 	}
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(PlayerQuitEvent event){
-		PSQuitEvent psquit = new PSQuitEvent(event.getPlayer(), event.getQuitMessage(), true);
-		Bukkit.getPluginManager().callEvent(psquit);
-		event.setQuitMessage(psquit.getQuitMessage());
+		if (!(event instanceof PSQuitEvent)) {
+			PSQuitEvent psquit = new PSQuitEvent(event.getPlayer(),event.getQuitMessage(), true);
+			Bukkit.getPluginManager().callEvent(psquit);
+			event.setQuitMessage(psquit.getQuitMessage());
+		}
 	}
 }
