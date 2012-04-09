@@ -1,3 +1,17 @@
+/**
+ * @Name: AFK handler 
+ * @Author: CorrieKay
+ * 
+ * @Function: Handles afk (away from keyboard) Statuses of players on the server
+ * 
+ * @Details: There are two types of afk status. Natural and Manual. Natural afk stems from a user sitting still, not breaking blocks, or chatting, for ninty seconds. 
+ * Manual afk happens when a player uses the /afk command. The user is no longer being listened to by the run() loop. They will not be toggled afk when they move,
+ * chat, or break blocks. the afk status will remain true until they type /afk again, the server reloads, or they relog into the server
+ * 
+ *@More_Details: The plugin suite listens to custom join events. Most are thrown by the main plugin and the invisibility handler. This plugin will use those to desync (read: stop listening/start listening)
+ * specific players.
+ */
+
 package com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers;
 
 import java.util.ArrayList;
@@ -92,8 +106,10 @@ public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
 	}
 	@EventHandler
 	public void onJoin(PSJoinEvent event){
-		playerAfk.put(event.getPlayer(), false);
-		playerTick.put(event.getPlayer(), 0);
+		if (!event.isCancelled()) {
+			playerAfk.put(event.getPlayer(), false);
+			playerTick.put(event.getPlayer(), 0);
+		}
 	}
 	@EventHandler
 	public void onQuit(PSQuitEvent event){
