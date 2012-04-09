@@ -126,6 +126,10 @@ public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
 	}
 	@EventHandler
 	public void onChat(PlayerChatEvent event){
+		if(event.getMessage().length()<4){
+			playerActivity(event.getPlayer());
+			return;
+		}
 		if(!event.getMessage().substring(0,4).equals("/afk")){
 			playerActivity(event.getPlayer());
 		}
