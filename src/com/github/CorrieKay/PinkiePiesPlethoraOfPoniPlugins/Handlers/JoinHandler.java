@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
@@ -22,18 +23,18 @@ public class JoinHandler implements Listener {
 	public JoinHandler(Mane instance){
 		configHandler = instance.getConfigHandler();
 	}
-	@EventHandler 
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onJoin(PSJoinEvent event){
 		Player player = event.getPlayer();
 		FileConfiguration config = configHandler.getPlayerConfig(player);
-		if(config != null&&!event.isSilent()){
+		if(config != null&&!event.isCancelled()){
 			event.setJoinMessage(ChatColor.RED+config.getString("nickname")+ChatColor.AQUA+" has returned to Equestria!");
 		}
 		if(event.isJoining()){
 			if(!player.hasPlayedBefore()||(player.hasPlayedBefore()&&config == null)){
 			Bukkit.getLogger().info("New Player detected: creating configuration");
 			config = configHandler.createNewPlayerConfig(player);
-			if (!event.isSilent()) {
+			if (!event.isCancelled()) {
 				event.setJoinMessage(ChatColor.AQUA + "Please welcome "+ ChatColor.RED + player.getName() + ChatColor.AQUA+ " to Equestria!");
 			}
 			List<String> ip = config.getStringList("ipAddress");
