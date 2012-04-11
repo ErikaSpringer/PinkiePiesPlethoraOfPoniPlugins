@@ -6,6 +6,9 @@ afk: false
 invisible: false
 viewingInventory: false
 nickname: new
+chatChannel: eq
+listenChannels:
+- eq
 ipAddress: {}
 ban:
   banned: false
