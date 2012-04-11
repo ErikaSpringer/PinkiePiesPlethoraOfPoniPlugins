@@ -7,7 +7,14 @@ commands:
         description: toggles manual afk
         usage: /afk toggles
         permission: pppopp.afk
-        permission-message: "You cant do this :c"
+    hide:
+        description: toggles hidden status silently
+        usage: /hide
+    fakehide:
+        description: toggles hidden status publicly, with quit/join messages
+        usage: /fakehide
 permissions:
     pppopp.afk:
+        default: false
+    pppopp.hide:
         default: false
