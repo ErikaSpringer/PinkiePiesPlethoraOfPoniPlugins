@@ -118,10 +118,8 @@ public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
 	}
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onJoin(PSJoinEvent event){
-		if (!event.isCancelled()) {
 			playerAfk.put(event.getPlayer(), false);
 			playerTick.put(event.getPlayer(), 0);
-		}
 	}
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onQuit(PSQuitEvent event){
