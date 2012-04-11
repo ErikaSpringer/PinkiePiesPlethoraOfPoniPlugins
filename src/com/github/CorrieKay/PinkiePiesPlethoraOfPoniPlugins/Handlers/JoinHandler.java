@@ -34,9 +34,6 @@ public class JoinHandler implements Listener {
 			if(!player.hasPlayedBefore()||(player.hasPlayedBefore()&&config == null)){
 			Bukkit.getLogger().info("New Player detected: creating configuration");
 			config = configHandler.createNewPlayerConfig(player);
-			if (!event.isCancelled()) {
-				event.setJoinMessage(ChatColor.AQUA + "Please welcome "+ ChatColor.RED + player.getName() + ChatColor.AQUA+ " to Equestria!");
-			}
 			List<String> ip = config.getStringList("ipAddress");
 			if (!ip.contains(player.getAddress().toString().substring(1,player.getAddress().toString().indexOf(":")))){
 				ip.add(player.getAddress().toString().substring(1,player.getAddress().toString().indexOf(":")));
