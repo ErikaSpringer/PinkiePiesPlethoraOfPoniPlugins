@@ -1,17 +1,19 @@
 package com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PSJoinEvent extends PlayerJoinEvent implements Cancellable{
-	
-	private boolean cancelled = false;
-	private boolean silent = false;
+
 	private final boolean isReallyJoining;
+	private final String joinMessage2;
+	private boolean cancelled = false;
 	
-	public PSJoinEvent(Player playerJoined, String joinMessage, boolean isReallyJoining) {
-		super(playerJoined, joinMessage);
+	public PSJoinEvent(Player playerJoined, boolean isReallyJoining) {
+		super(playerJoined, ChatColor.RED+playerJoined.getDisplayName()+ChatColor.AQUA+" has returned to Equestria!");
+		joinMessage2 = ChatColor.RED+playerJoined.getDisplayName()+ChatColor.AQUA+" has returned to Equestria!";
 		this.isReallyJoining = isReallyJoining;
 	}
 	public boolean isJoining() {
@@ -22,13 +24,12 @@ public class PSJoinEvent extends PlayerJoinEvent implements Cancellable{
 		return cancelled;
 	}
 	@Override
-	public void setCancelled(boolean arg0) {
-		cancelled = arg0;
-	}
-	public boolean isSilent() {
-		return silent;
-	}
-	public void setSilent(boolean silent) {
-		this.silent = silent;
+	public void setCancelled(boolean arg) {
+		if(arg){
+			setJoinMessage(null);
+		} else {
+			setJoinMessage(joinMessage2);
+		}
+		cancelled = arg;
 	}
 }
