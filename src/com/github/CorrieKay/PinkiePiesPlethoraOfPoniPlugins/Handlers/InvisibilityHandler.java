@@ -150,11 +150,23 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 			FileConfiguration config = instance.getConfigHandler().getPlayerConfig(event.getPlayer());
 			if(config.getBoolean("invisible")){
 				turnOn(event.getPlayer(), true);
+				event.setCancelled(true);
 				Player corrie = Bukkit.getServer().getPlayer("TheQueenOfPink");
 				if(corrie!=null){
 					corrie.sendMessage(ChatColor.DARK_GRAY+event.getPlayer().getDisplayName()+ChatColor.DARK_GRAY+" has logged in silently");
 				}
 			}
+			for(Player player : Bukkit.getServer().getOnlinePlayers()){
+				if(!invisiblePlayers.contains(player)){
+					event.getPlayer().showPlayer(player);
+				}
+			}
+		}
+	}
+	@EventHandler
+	public void onQuit(PSQuitEvent event){
+		if(invisiblePlayers.contains(event.getPlayer())){
+			event.setCancelled(true);
 		}
 	}
 	@EventHandler
