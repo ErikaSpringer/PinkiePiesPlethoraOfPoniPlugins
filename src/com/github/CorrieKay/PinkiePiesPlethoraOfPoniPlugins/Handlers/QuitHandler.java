@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,9 +31,6 @@ public class QuitHandler implements Listener {
 		}
 		//TODO: final invsee stuff
 		event.setQuitMessage(null);
-		if(!event.isSilent()){
-			event.setQuitMessage(ChatColor.RED+event.getPlayer().getDisplayName()+ChatColor.AQUA+" has left Equestria!");
-		}
 		ch.savePlayerConfig(config);
 	}
 	public String getSystemDate(){
