@@ -29,6 +29,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -43,8 +44,12 @@ public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
 	private final Map<Player,Boolean> playerAfk = new HashMap<Player,Boolean>();
 	private final Map<Player,Integer> playerTick = new HashMap<Player,Integer>();
 	private final ArrayList<Player> manuAFK = new ArrayList<Player>();
+	private final Mane instance;
 	
-	public void initialize(Mane instance){
+	public AFKhandler (Mane instance){
+		this.instance = instance;
+	}
+	public void initialize(){
 		Bukkit.getScheduler().scheduleAsyncRepeatingTask(instance, this, 0, 20);
 	}
 	public boolean isAfk(Player player){
@@ -91,6 +96,10 @@ public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
 			return true;
 		}
 		Player player = (Player)sender;
+		if(instance.getInvisHandler().isHidden(player)){
+			player.sendMessage(ChatColor.GRAY+"Please dont mess with the AFK handler while invisible");
+			return true;
+		}
 		if (!manuAFK.contains(player)) {
 			if (!isAfk(player)) {
 				player.sendMessage(ChatColor.GRAY + player.getDisplayName()+ ChatColor.GRAY + " is now afk.");
@@ -107,14 +116,14 @@ public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
 			return true;
 		}
 	}
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onJoin(PSJoinEvent event){
 		if (!event.isCancelled()) {
 			playerAfk.put(event.getPlayer(), false);
 			playerTick.put(event.getPlayer(), 0);
 		}
 	}
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onQuit(PSQuitEvent event){
 		playerAfk.remove(event.getPlayer());
 		playerTick.remove(event.getPlayer());
