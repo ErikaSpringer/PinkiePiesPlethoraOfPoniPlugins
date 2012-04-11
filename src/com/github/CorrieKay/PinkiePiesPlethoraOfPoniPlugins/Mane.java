@@ -11,20 +11,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.AFKhandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.ConfigHandler;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InvisibilityHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.JoinHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.QuitHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSJoinEvent;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
 
 public class Mane extends JavaPlugin implements Listener{
-	private final AFKhandler afk = new AFKhandler();
+	private final AFKhandler afk = new AFKhandler(this);
 	private final ConfigHandler ch = new ConfigHandler(this);
 	private final JoinHandler jh = new JoinHandler(this);
 	private final QuitHandler qh = new QuitHandler(this);
+	private final InvisibilityHandler ih = new InvisibilityHandler(this, new String[] {"hide","fakehide"});
 	
 	public void onEnable(){
 		PluginManager pm = Bukkit.getPluginManager();
-		afk.initialize(this);
+		afk.initialize();
+		ih.initialize();
+		pm.registerEvents(ih, this);
 		pm.registerEvents(jh, this);
 		pm.registerEvents(qh, this);
 		pm.registerEvents(this, this);
@@ -37,7 +41,7 @@ public class Mane extends JavaPlugin implements Listener{
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event){
 		if (!(event instanceof PSJoinEvent)) {
-			PSJoinEvent psjoin = new PSJoinEvent(event.getPlayer(),event.getJoinMessage(), true);
+			PSJoinEvent psjoin = new PSJoinEvent(event.getPlayer(), true);
 			Bukkit.getPluginManager().callEvent(psjoin);
 			event.setJoinMessage(psjoin.getJoinMessage());
 		}
@@ -45,7 +49,7 @@ public class Mane extends JavaPlugin implements Listener{
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event){
 		if (!(event instanceof PSQuitEvent)) {
-			PSQuitEvent psquit = new PSQuitEvent(event.getPlayer(),event.getQuitMessage(), true);
+			PSQuitEvent psquit = new PSQuitEvent(event.getPlayer(), true);
 			Bukkit.getPluginManager().callEvent(psquit);
 			event.setQuitMessage(psquit.getQuitMessage());
 		}
@@ -55,5 +59,8 @@ public class Mane extends JavaPlugin implements Listener{
 	}
 	public AFKhandler getAfkHandler(){
 		return afk;
+	}
+	public InvisibilityHandler getInvisHandler(){
+		return ih;
 	}
 }
