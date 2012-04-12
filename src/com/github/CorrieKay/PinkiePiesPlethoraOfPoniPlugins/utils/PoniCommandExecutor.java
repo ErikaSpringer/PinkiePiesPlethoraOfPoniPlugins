@@ -1,5 +1,6 @@
 package com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
@@ -49,5 +50,18 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 			return null;
 		}
 		return players;
+	}
+	protected ArrayList<String> getPlayerName(String arg){
+		ArrayList<String> playerNames = new ArrayList<String>();
+		for(File file : (new File(instance.getDataFolder()+File.separator+"players")).listFiles()){
+			String fileName = file.getName();
+			fileName = fileName.substring(0, fileName.length()-4);
+			if(fileName.contains(arg)){
+				playerNames.add(fileName);
+			}
+		}
+		if(playerNames.size()==0){
+			return null;
+		} else return playerNames;
 	}
 }
