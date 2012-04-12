@@ -16,7 +16,7 @@ public class PSQuitEvent extends PlayerQuitEvent implements Cancellable{
 		quitMessage2 = ChatColor.RED+playerJoined.getDisplayName()+ChatColor.AQUA+" has left Equestria!";
 		this.isReallyQuitting = isReallyQuitting;
 	}
-	public boolean getQuitting() {
+	public boolean isQuitting() {
 		return isReallyQuitting;
 	}
 	@Override
