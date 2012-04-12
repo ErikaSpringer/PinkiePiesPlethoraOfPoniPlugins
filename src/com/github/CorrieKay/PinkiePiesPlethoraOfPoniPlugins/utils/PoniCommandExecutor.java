@@ -16,18 +16,23 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 	
 	protected final Mane instance;
 	protected final String pinkieSays = ChatColor.LIGHT_PURPLE+"[ServerGuardian]Pinkie Pie : ";
+	protected final ChatColor pinkieColor = ChatColor.LIGHT_PURPLE;
 	
 	public PoniCommandExecutor(Mane plugin){
 		instance = plugin;
 	}
 
-	public void registerCommands(Mane instance, String[] commandsToRegister, PoniCommandExecutor executor){
+	public void registerCommands(String[] commandsToRegister, PoniCommandExecutor executor){
 		for(String cmds : commandsToRegister){
 			instance.getCommand(cmds).setExecutor(executor);
 		}
 	}
 	protected boolean cantDo(Player player){
 		player.sendMessage(pinkieSays+"Oh no! Im sorry, but you dont have permission to do this! :c");
+		return true;
+	}
+	protected boolean pinkieSay(String message, Player player){
+		player.sendMessage(pinkieSays+message);
 		return true;
 	}
 	protected boolean senderCant(CommandSender sender){
@@ -42,15 +47,20 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 	protected ArrayList<Player> getPlayer(String arg, boolean isCorrie){
 		ArrayList<Player> players = new ArrayList<Player>();
 		for(Player checkPlayer : Bukkit.getServer().getOnlinePlayers()){
+			System.out.print(checkPlayer.getName());
 			if(checkPlayer.getName().contains(arg)||ChatColor.stripColor(checkPlayer.getDisplayName()).contains(arg)){
+				System.out.print("name matches...");
 				if(!instance.getInvisHandler().isHidden(checkPlayer)||isCorrie){
+					System.out.print("adding player");
 					players.add(checkPlayer);
 				}
 			}
 		}
 		if(players.size()==0){
+			System.out.print("size is zero, returning null.");
 			return null;
 		}
+		System.out.print("there are players in here!");
 		return players;
 	}
 	protected ArrayList<String> getPlayerName(String arg){
@@ -74,11 +84,11 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 		stringList=stringList.substring(0,stringList.length()-2);
 		return pinkieSays+"Too many matches silly! : "+stringList;
 	}
-	protected String tooManyMatches(ArrayList<String> list){
+	protected String tooManyMatches(String derp){
 		String stringList = "";
-		for(String string : list){
-			stringList+=ChatColor.RED+string+ChatColor.GRAY+", ";
-		}
+		//for(String string : list){
+			//stringList+=ChatColor.RED+string+ChatColor.GRAY+", ";
+		//}
 		stringList = stringList.substring(0, stringList.length()-2);
 		return pinkieSays+"Too many matches silly! : "+ stringList;
 	}
