@@ -30,7 +30,6 @@ public class QuitHandler implements Listener {
 			//TODO: more invsee stuff
 		}
 		//TODO: final invsee stuff
-		event.setQuitMessage(null);
 		ch.savePlayerConfig(config);
 	}
 	public String getSystemDate(){
