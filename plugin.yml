@@ -13,6 +13,9 @@ commands:
     fakehide:
         description: toggles hidden status publicly, with quit/join messages
         usage: /fakehide
+    invsee:
+        description: veiws another users inventory. if the user is online, you can view and edit in real time
+        usage: /invsee <player>
 permissions:
     pppopp.afk:
         default: false
