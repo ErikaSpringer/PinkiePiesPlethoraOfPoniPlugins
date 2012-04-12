@@ -84,7 +84,7 @@ public class ConfigHandler {
 			e.printStackTrace();
 			return null;
 		}
-		FileConfiguration config = YamlConfiguration.loadConfiguration(instance.getResource("playerconfig.yml"));
+		FileConfiguration config = YamlConfiguration.loadConfiguration(instance.getResource("config.yml"));
 		config.set("name", player.getName());
 		config.set("nickname", player.getDisplayName());
         if (!player.hasPlayedBefore()) {
