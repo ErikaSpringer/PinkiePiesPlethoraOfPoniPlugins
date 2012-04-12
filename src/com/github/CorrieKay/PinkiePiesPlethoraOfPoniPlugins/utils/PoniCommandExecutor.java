@@ -11,6 +11,12 @@ import org.bukkit.entity.Player;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 
 public abstract class PoniCommandExecutor implements CommandExecutor{
+	
+	Mane instance;
+	
+	public PoniCommandExecutor(Mane plugin){
+		instance = plugin;
+	}
 
 	public void registerCommands(Mane instance, String[] commandsToRegister, PoniCommandExecutor executor){
 		for(String cmds : commandsToRegister){
@@ -30,12 +36,17 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 			return true;
 		} else return false;
 	}
-	protected ArrayList<Player> getPlayer(String arg){
+	protected ArrayList<Player> getPlayer(String arg, boolean isCorrie){
 		ArrayList<Player> players = new ArrayList<Player>();
 		for(Player checkPlayer : Bukkit.getServer().getOnlinePlayers()){
 			if(checkPlayer.getName().contains(arg)||ChatColor.stripColor(checkPlayer.getDisplayName()).contains(arg)){
-				players.add(checkPlayer);
+				if(!instance.getInvisHandler().isHidden(checkPlayer)||isCorrie){
+					players.add(checkPlayer);
+				}
 			}
+		}
+		if(players.size()==0){
+			return null;
 		}
 		return players;
 	}
