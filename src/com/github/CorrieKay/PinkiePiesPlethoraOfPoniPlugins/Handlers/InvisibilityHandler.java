@@ -34,7 +34,7 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 		this.cmds = cmds;
 	}
 	public void initialize(){
-		registerCommands(instance, cmds, this);
+		registerCommands(cmds, this);
 	}
 	public boolean isHidden(Player player){
 		if(invisiblePlayers.contains(player)){
