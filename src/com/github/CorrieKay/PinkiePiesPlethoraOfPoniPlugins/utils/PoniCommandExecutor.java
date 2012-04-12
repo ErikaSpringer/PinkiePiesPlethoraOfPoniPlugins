@@ -2,6 +2,7 @@ package com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -63,5 +64,21 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 		if(playerNames.size()==0){
 			return null;
 		} else return playerNames;
+	}
+	protected String tooManyMatches(List<Player> list){
+		String stringList = "";
+		for(Player player : list){
+			stringList+=ChatColor.RED+player.getDisplayName()+ChatColor.GRAY+", ";
+		}
+		stringList=stringList.substring(0,stringList.length()-2);
+		return ChatColor.RED+"Too many matches! : "+stringList;
+	}
+	protected String tooManyMatches(ArrayList<String> list){
+		String stringList = "";
+		for(String string : list){
+			stringList+=ChatColor.RED+string+ChatColor.GRAY+", ";
+		}
+		stringList = stringList.substring(0, stringList.length()-2);
+		return ChatColor.RED+"Too many matches! : "+ stringList;
 	}
 }
