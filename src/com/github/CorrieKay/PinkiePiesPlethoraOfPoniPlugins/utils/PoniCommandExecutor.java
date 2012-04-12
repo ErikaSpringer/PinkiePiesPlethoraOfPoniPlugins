@@ -14,7 +14,8 @@ import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 
 public abstract class PoniCommandExecutor implements CommandExecutor{
 	
-	Mane instance;
+	protected final Mane instance;
+	protected final String pinkieSays = ChatColor.LIGHT_PURPLE+"[ServerGuardian]Pinkie Pie : ";
 	
 	public PoniCommandExecutor(Mane plugin){
 		instance = plugin;
@@ -26,7 +27,7 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 		}
 	}
 	protected boolean cantDo(Player player){
-		player.sendMessage(ChatColor.DARK_GRAY+"You can't do this :c");
+		player.sendMessage(pinkieSays+"Oh no! Im sorry, but you dont have permission to do this! :c");
 		return true;
 	}
 	protected boolean senderCant(CommandSender sender){
@@ -71,7 +72,7 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 			stringList+=ChatColor.RED+player.getDisplayName()+ChatColor.GRAY+", ";
 		}
 		stringList=stringList.substring(0,stringList.length()-2);
-		return ChatColor.RED+"Too many matches! : "+stringList;
+		return pinkieSays+"Too many matches silly! : "+stringList;
 	}
 	protected String tooManyMatches(ArrayList<String> list){
 		String stringList = "";
@@ -79,6 +80,6 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 			stringList+=ChatColor.RED+string+ChatColor.GRAY+", ";
 		}
 		stringList = stringList.substring(0, stringList.length()-2);
-		return ChatColor.RED+"Too many matches! : "+ stringList;
+		return pinkieSays+"Too many matches silly! : "+ stringList;
 	}
 }
