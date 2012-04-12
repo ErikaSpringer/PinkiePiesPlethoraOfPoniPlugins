@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.AFKhandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.ConfigHandler;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InventorySee;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InvisibilityHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.JoinHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.QuitHandler;
@@ -23,16 +24,19 @@ public class Mane extends JavaPlugin implements Listener{
 	private final JoinHandler jh = new JoinHandler(this);
 	private final QuitHandler qh = new QuitHandler(this);
 	private final InvisibilityHandler ih = new InvisibilityHandler(this, new String[] {"hide","fakehide"});
+	private final InventorySee is = new InventorySee(this, new String[] {"invsee"});
 	
 	public void onEnable(){
 		PluginManager pm = Bukkit.getPluginManager();
 		afk.initialize();
 		ih.initialize();
+		is.initialize();
+		pm.registerEvents(this, this);
 		pm.registerEvents(ih, this);
 		pm.registerEvents(jh, this);
 		pm.registerEvents(qh, this);
-		pm.registerEvents(this, this);
 		pm.registerEvents(afk, this);
+		pm.registerEvents(is, this);
 		getCommand("afk").setExecutor(afk);
 	}
 	public void onDisable(){
