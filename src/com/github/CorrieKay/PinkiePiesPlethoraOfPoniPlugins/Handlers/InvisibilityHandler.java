@@ -29,6 +29,7 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 	private final ArrayList<Player> noPickup = new ArrayList<Player>();
 	private final String[] cmds;
 	public InvisibilityHandler(Mane instance, String[] cmds){
+		super(instance);
 		this.instance = instance;
 		this.cmds = cmds;
 	}
@@ -144,7 +145,7 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onJoin(PSJoinEvent event){
 		if(event.isJoining()){
 			FileConfiguration config = instance.getConfigHandler().getPlayerConfig(event.getPlayer());
