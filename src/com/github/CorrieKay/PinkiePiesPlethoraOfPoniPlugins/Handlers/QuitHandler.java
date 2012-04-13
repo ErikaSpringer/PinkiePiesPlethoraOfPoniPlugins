@@ -24,12 +24,12 @@ public class QuitHandler implements Listener {
 		FileConfiguration config = ch.getPlayerConfig(event.getPlayer());
 		config.set("lastLogout", getSystemDate());
 		config.set("online", false);
-		if(config.getBoolean("viewingInventory")){
-			//TODO: invsee stuff
+		if(!config.getBoolean("viewingInventory")){
+			config.set("inventory", InventorySee.toStringList(event.getPlayer().getInventory().getContents()));
 		} else {
-			//TODO: more invsee stuff
+			event.getPlayer().getInventory().setContents(InventorySee.toInventory(config));
+			config.set("viewingInventory", false);
 		}
-		//TODO: final invsee stuff
 		ch.savePlayerConfig(config);
 	}
 	public String getSystemDate(){
