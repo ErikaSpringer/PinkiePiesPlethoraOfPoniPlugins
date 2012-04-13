@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,26 +34,52 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 		super.registerCommands(cmds, this);
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!(sender instanceof Player)){
+		if(!(sender instanceof Player)){//not a player
 			return senderCant(sender);
 		}
 		Player player = (Player)sender;
-		if(args.length == 0){
-			return pinkieSay("Oh my.. It looks like you made a mistake... Theres no player selected, silly!", player);
+		FileConfiguration config = instance.getConfigHandler().getPlayerConfig(player);
+		if(config.getBoolean("viewingInventory")){//theyre viewing an inventory
+			if(args.length==0){//they issued "/invsee" they want to go back to their inventory
+				player.getInventory().setContents(toInventory(config));
+				config.set("viewingInventory", false);
+				instance.getConfigHandler().savePlayerConfig(config);
+				return pinkieSay("*hands you your stuff back* Here you go! Its your inventory!",player);//viewing their inventory
+			}
 		}
-		ArrayList<Player> players = getPlayer(args[0],true);
-		for(Player derp : players){
-			player.sendMessage(derp.getName());
+		if(args.length == 0){//theyre viewing their inventory, and wanna see another inventory, but havnt specified another player
+			return pinkieSay(noPlayerSpecified(), player);
 		}
-		Player player2 = players.get(0);
-		listenToInventory(player, player2);
+		boolean isCorrie = player.getName().equals("TheQueenOfPink");
+		ArrayList<Player> onlinePlayers = getPlayerOnline(args[0], isCorrie);
+		if(onlinePlayers == null){//player is offline, or not found, check configs now.
+			ArrayList<String> offlinePlayers = getPlayerOffline(args[0]);
+			if(offlinePlayers == null){//no matches found, try again!
+				return pinkieSay(playerNotOnline(),player);
+			}
+			if(offlinePlayers.size()>1){//too many offline matches found, please narrow your search.
+				return pinkieSay(tooManyMatches(offlinePlayers),player);
+			}//single offline player found!
+			String offlinePlayer = offlinePlayers.get(0);
+			FileConfiguration playerConfig = instance.getConfigHandler().getPlayerConfig(offlinePlayer);
+			player.getInventory().setContents(toInventory(playerConfig));
+			config.set("viewingInventory", true);
+			instance.getConfigHandler().savePlayerConfig(config);
+			return pinkieSay("Lookie here! its "+offlinePlayers.get(0)+"'s inventory!",player);//looking at a players inventory!
+		}
+		if(onlinePlayers.size()>1){
+			return pinkieSay(tooManyMatches(onlinePlayers), player);
+		}
+		Player player2 = onlinePlayers.get(0);
 		return true;
 	}
 	/**
 	 * @Functions here deal with live inventory viewing.
 	 */
+	@SuppressWarnings("unused")
 	private void listenToInventory(Player listener, Player inventoryOwner){
 		viewingInventoryLive.put(listener, inventoryOwner);
 		viewingInventoryLive.put(inventoryOwner, listener);
@@ -71,7 +98,8 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 	/**
 	 * @Functions here deal with inventory translation, from stringList to inventory, and from inventory to StringList
 	 */
-	public static ItemStack[] toInventory(List<String> inventoryString){
+	public static ItemStack[] toInventory(FileConfiguration config){
+		List<String> inventoryString = config.getStringList("inventory");
 		ItemStack[] items = new ItemStack[36];
 		int number = 0;
 		for(String stack : inventoryString){
