@@ -168,6 +168,8 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 	public void onQuit(PSQuitEvent event){
 		if(invisiblePlayers.contains(event.getPlayer())&&event.isQuitting()){
 			event.setCancelled(true);
+			invisiblePlayers.remove(event.getPlayer());
+			noPickup.remove(event.getPlayer());
 		}
 	}
 	@EventHandler
