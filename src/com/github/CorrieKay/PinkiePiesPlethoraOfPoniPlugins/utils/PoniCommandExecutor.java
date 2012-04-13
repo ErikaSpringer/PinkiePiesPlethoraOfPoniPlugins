@@ -15,7 +15,7 @@ import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 public abstract class PoniCommandExecutor implements CommandExecutor{
 	
 	protected final Mane instance;
-	protected final String pinkieSays = ChatColor.LIGHT_PURPLE+"[ServerGuardian]Pinkie Pie : ";
+	protected final String pinkieSays = ChatColor.LIGHT_PURPLE+"[ServerGuardian] Pinkie Pie: ";
 	protected final ChatColor pinkieColor = ChatColor.LIGHT_PURPLE;
 	
 	public PoniCommandExecutor(Mane plugin){
@@ -44,7 +44,10 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 			return true;
 		} else return false;
 	}
-	protected ArrayList<Player> getPlayer(String arg, boolean isCorrie){
+	/**
+	 * @Function: these functions return lists of players.
+	 */
+	protected ArrayList<Player> getPlayerOnline(String arg, boolean isCorrie){
 		arg = arg.toLowerCase();
 		ArrayList<Player> players = new ArrayList<Player>();
 		for(Player checkPlayer : Bukkit.getServer().getOnlinePlayers()){
@@ -59,7 +62,7 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 		}
 		return players;
 	}
-	protected ArrayList<String> getPlayerName(String arg){
+	protected ArrayList<String> getPlayerOffline(String arg){
 		arg = arg.toLowerCase();
 		ArrayList<String> playerNames = new ArrayList<String>();
 		for(File file : (new File(instance.getDataFolder()+File.separator+"players")).listFiles()){
@@ -73,13 +76,16 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 			return null;
 		} else return playerNames;
 	}
+	/**
+	 * @Function: these methods return error messages
+	 */
 	protected String tooManyMatches(List<Player> list){
 		String stringList = "";
 		for(Player player : list){
 			stringList+=ChatColor.RED+player.getDisplayName()+ChatColor.GRAY+", ";
 		}
 		stringList=stringList.substring(0,stringList.length()-2);
-		return pinkieSays+"Too many matches silly! : "+stringList;
+		return "Too many matches silly! : "+stringList;
 	}
 	protected String tooManyMatches(ArrayList<String> list){
 		String stringList = "";
@@ -87,6 +93,15 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 			stringList+=ChatColor.RED+string+ChatColor.GRAY+", ";
 		}
 		stringList = stringList.substring(0, stringList.length()-2);
-		return pinkieSays+"Too many matches silly! : "+ stringList;
+		return "Too many matches silly! : "+ stringList;
+	}
+	protected String noPlayerSpecified(){
+		return "Oh my.. It looks like you made a mistake... Theres no player selected, silly!";
+	}
+	protected String playerNotOnline(){
+		return "I looked high and low, but I couldnt find that pony! :C";
+	}
+	protected String inventoryCorrupt(){
+		return "That players config inventory doesnt seem to want to co-operate, the silly filly!";
 	}
 }
