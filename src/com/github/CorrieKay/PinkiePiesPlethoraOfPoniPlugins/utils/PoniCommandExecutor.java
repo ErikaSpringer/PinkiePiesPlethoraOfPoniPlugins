@@ -45,30 +45,27 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 		} else return false;
 	}
 	protected ArrayList<Player> getPlayer(String arg, boolean isCorrie){
+		arg = arg.toLowerCase();
 		ArrayList<Player> players = new ArrayList<Player>();
 		for(Player checkPlayer : Bukkit.getServer().getOnlinePlayers()){
-			System.out.print(checkPlayer.getName());
-			if(checkPlayer.getName().contains(arg)||ChatColor.stripColor(checkPlayer.getDisplayName()).contains(arg)){
-				System.out.print("name matches...");
+			if(checkPlayer.getName().toLowerCase().contains(arg)||ChatColor.stripColor(checkPlayer.getDisplayName()).toLowerCase().contains(arg)){
 				if(!instance.getInvisHandler().isHidden(checkPlayer)||isCorrie){
-					System.out.print("adding player");
 					players.add(checkPlayer);
 				}
 			}
 		}
 		if(players.size()==0){
-			System.out.print("size is zero, returning null.");
 			return null;
 		}
-		System.out.print("there are players in here!");
 		return players;
 	}
 	protected ArrayList<String> getPlayerName(String arg){
+		arg = arg.toLowerCase();
 		ArrayList<String> playerNames = new ArrayList<String>();
 		for(File file : (new File(instance.getDataFolder()+File.separator+"players")).listFiles()){
 			String fileName = file.getName();
 			fileName = fileName.substring(0, fileName.length()-4);
-			if(fileName.contains(arg)){
+			if(fileName.toLowerCase().contains(arg)){
 				playerNames.add(fileName);
 			}
 		}
@@ -84,11 +81,11 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 		stringList=stringList.substring(0,stringList.length()-2);
 		return pinkieSays+"Too many matches silly! : "+stringList;
 	}
-	protected String tooManyMatches(String derp){
+	protected String tooManyMatches(ArrayList<String> list){
 		String stringList = "";
-		//for(String string : list){
-			//stringList+=ChatColor.RED+string+ChatColor.GRAY+", ";
-		//}
+		for(String string : list){
+			stringList+=ChatColor.RED+string+ChatColor.GRAY+", ";
+		}
 		stringList = stringList.substring(0, stringList.length()-2);
 		return pinkieSays+"Too many matches silly! : "+ stringList;
 	}
