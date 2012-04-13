@@ -9,14 +9,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.AFKhandler;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.ConfigHandler;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InventorySee;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InvisibilityHandler;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.JoinHandler;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.QuitHandler;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSJoinEvent;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.*;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.*;
 
 public class Mane extends JavaPlugin implements Listener{
 	private final AFKhandler afk = new AFKhandler(this);
