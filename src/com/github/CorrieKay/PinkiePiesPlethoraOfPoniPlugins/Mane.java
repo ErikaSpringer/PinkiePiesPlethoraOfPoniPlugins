@@ -25,7 +25,7 @@ public class Mane extends JavaPlugin implements Listener{
 	private final ConfigHandler ch = new ConfigHandler(this);
 	private final JoinHandler jh = new JoinHandler(this);
 	private final QuitHandler qh = new QuitHandler(this);
-	private final InvisibilityHandler ih = new InvisibilityHandler(this, new String[] {"hide","fakehide"});
+	private final InvisibilityHandler ih = new InvisibilityHandler(this, new String[] {"hide","fakehide","nopickup"});
 	private final InventorySee is = new InventorySee(this, new String[] {"invsee"});
 	
 	public void onEnable(){
