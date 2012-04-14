@@ -12,13 +12,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.LookitInventory;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExecutor;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.UpdateInventory;
 
 public class InventorySee extends PoniCommandExecutor implements Listener{
 	
@@ -33,8 +37,6 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 	public void initialize(){
 		super.registerCommands(cmds, this);
 	}
-
-	@SuppressWarnings("unused")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!(sender instanceof Player)){//not a player
@@ -44,6 +46,7 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 		FileConfiguration config = instance.getConfigHandler().getPlayerConfig(player);
 		if(config.getBoolean("viewingInventory")){//theyre viewing an inventory
 			if(args.length==0){//they issued "/invsee" they want to go back to their inventory
+				stopListeningToInventory(player);
 				player.getInventory().setContents(toInventory(config));
 				config.set("viewingInventory", false);
 				instance.getConfigHandler().savePlayerConfig(config);
@@ -64,36 +67,82 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 				return pinkieSay(tooManyMatches(offlinePlayers),player);
 			}//single offline player found!
 			String offlinePlayer = offlinePlayers.get(0);
+			config.set("inventory", toStringList(player.getInventory().getContents()));
+			instance.getConfigHandler().savePlayerConfig(config);
 			FileConfiguration playerConfig = instance.getConfigHandler().getPlayerConfig(offlinePlayer);
 			player.getInventory().setContents(toInventory(playerConfig));
 			config.set("viewingInventory", true);
 			instance.getConfigHandler().savePlayerConfig(config);
 			return pinkieSay("Lookie here! its "+offlinePlayers.get(0)+"'s inventory!",player);//looking at a players inventory!
-		}
-		if(onlinePlayers.size()>1){
+		}//online players have been found
+		if(onlinePlayers.size()>1){//too many online players
 			return pinkieSay(tooManyMatches(onlinePlayers), player);
 		}
-		Player player2 = onlinePlayers.get(0);
+		Player player2 = onlinePlayers.get(0);//just one aaaaaw yeeeeah.
+		config.set("inventory", toStringList(player.getInventory().getContents()));
+		player.getInventory().setContents(player2.getInventory().getContents());
+		listenToInventory(player,player2);
+		if (instance.getInvisHandler().isPickingUp(player)) {
+			instance.getInvisHandler().pickupOff(player);
+		}
+		config.set("viewingInventory",true);
+		instance.getConfigHandler().savePlayerConfig(config);
 		return true;
 	}
 	/**
 	 * @Functions here deal with live inventory viewing.
 	 */
-	@SuppressWarnings("unused")
 	private void listenToInventory(Player listener, Player inventoryOwner){
 		viewingInventoryLive.put(listener, inventoryOwner);
-		viewingInventoryLive.put(inventoryOwner, listener);
 		listener.sendMessage(pinkieSays+"Hey, youre watching "+inventoryOwner.getDisplayName()+pinkieColor+"\'s pockets!");
+	}
+	private void stopListeningToInventory(Player player){
+		if (viewingInventoryLive.containsKey(player)) {
+			viewingInventoryLive.remove(player);
+		}
+	}
+	@EventHandler
+	public void onQuit(PSQuitEvent event){
+		if(viewingInventoryLive.containsKey(event.getPlayer())){
+			viewingInventoryLive.remove(event.getPlayer());
+		}
+		for(Player player : viewingInventoryLive.keySet()){
+			if(viewingInventoryLive.get(player).equals(event.getPlayer())){
+				pinkieSay("Hey hey hey! The pony who's inventory you were watching left! You can still see his inventory though! so thats pretty cool.",player);
+				viewingInventoryLive.remove(player);
+			}
+		}
 	}
 	@EventHandler
 	public void onInventoryEdit(InventoryClickEvent event){
 		if(!(event.getWhoClicked() instanceof Player)){
 			return;
 		}
-		Player player = (Player)event.getWhoClicked();
-		if(viewingInventoryLive.containsKey(player)){
-			Bukkit.getScheduler().scheduleAsyncDelayedTask(instance, new LookitInventory(viewingInventoryLive.get(player),player), 1);
+		checkIfLiveViewing((Player)event.getWhoClicked());
+	}
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPickup(PlayerPickupItemEvent event){
+		if (!event.isCancelled()){
+			checkIfLiveViewing(event.getPlayer());
 		}
+	}
+	@EventHandler
+	public void onDrop(PlayerDropItemEvent event){
+		checkIfLiveViewing(event.getPlayer());
+	}
+	private void checkIfLiveViewing(Player player){
+		if(viewingInventoryLive.containsKey(player)){
+			onInvChange(player, viewingInventoryLive.get(player));
+		} else if(viewingInventoryLive.containsValue(player)){
+			for(Player key : viewingInventoryLive.keySet()){
+				if(viewingInventoryLive.get(key).equals(player)){
+					onInvChange(player,key);
+				}
+			}
+		}
+	}
+	private void onInvChange(Player inventoryOwner, Player listener){
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(instance, new UpdateInventory(inventoryOwner, listener),1);
 	}
 	/**
 	 * @Functions here deal with inventory translation, from stringList to inventory, and from inventory to StringList
