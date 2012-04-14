@@ -10,14 +10,26 @@ commands:
     hide:
         description: toggles hidden status silently
         usage: /hide
+        permission: pppopp.hide
     fakehide:
         description: toggles hidden status publicly, with quit/join messages
         usage: /fakehide
+        permission: pppopp.hide
+    nopickup:
+        description: toggles no pickup of items
+        usage: /nopickup
+        aliases: np
+        permission: pppopp.nopickup
     invsee:
         description: veiws another users inventory. if the user is online, you can view and edit in real time
         usage: /invsee <player>
+        permission: pppopp.invsee
 permissions:
     pppopp.afk:
         default: false
     pppopp.hide:
+        default: false
+    pppopp.invsee:
+        default: false
+    pppopp.nopickup:
         default: false
