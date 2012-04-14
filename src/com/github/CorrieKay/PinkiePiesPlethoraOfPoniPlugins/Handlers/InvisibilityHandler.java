@@ -41,6 +41,10 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 			return true;
 		} else return false;
 	}
+	public boolean isPickingUp(Player player){
+		if(noPickup.contains(player)) return false;
+		else return true;
+	}
 	public void toggleInvisibility(Player player, boolean silent){
 		if(isHidden(player)){
 			turnOff(player,silent);
@@ -49,7 +53,7 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 	private void turnOn(Player player, boolean silent){
 		invisiblePlayers.add(player);
 		noPickup.add(player);
-		player.sendMessage(ChatColor.GRAY+"You are now hidden! Pickup off!");
+		pinkieSay("shhh!~ youre hidden now!", player);
 		//hides the player from everyone but TheQueenOfPink
 		for(Player player2 : Bukkit.getServer().getOnlinePlayers()){
 			if(!player2.getName().equals("TheQueenOfPink")&&!player.equals(player2)){
@@ -86,7 +90,7 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 	private void turnOff(Player player, boolean silent){
 		invisiblePlayers.remove(player);
 		noPickup.remove(player);
-		player.sendMessage(ChatColor.GRAY+"You are now visible! Pickup on!");
+		pinkieSay("You're visible! ponies can see you!",player);
 		for(Player player2 : Bukkit.getServer().getOnlinePlayers()){
 			player2.showPlayer(player);
 		}
@@ -102,23 +106,18 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 		config.set("invisible", false);
 		instance.getConfigHandler().savePlayerConfig(config);
 	}
-	public boolean isPickingUp(Player player){
-		if(noPickup.contains(player)){
-			return false;
-		} else return true;
-	}
 	public void togglePickup(Player player){
 		if(isPickingUp(player)){
 			pickupOff(player);
 		} else pickupOn(player);
 	}
-	private void pickupOff(Player player){
+	public void pickupOff(Player player){
 		noPickup.add(player);
-		player.sendMessage(ChatColor.GRAY+"Pickup off!");
+		pinkieSay("You mean to say you DON\'T want these items? Oki doki loki!",player);
 	}
-	private void pickupOn(Player player){
+	public void pickupOn(Player player){
 		noPickup.remove(player);
-		player.sendMessage(ChatColor.GRAY+"Pickup on!");
+		pinkieSay("Item pickup on! lets get some loot!",player);
 	}
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,String[] args) {
@@ -126,14 +125,15 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 			return senderCant(sender);
 		} else {
 			Player player = (Player)sender;
-			if(checkPerm("pppopp.hide",player)){
-				if(cmd.getName().equals("hide")){
-					toggleInvisibility(player,true);
-				}
-				if(cmd.getName().equals("fakehide")){
-					toggleInvisibility(player,false);
-				} return true;
-			} else return cantDo(player);
+			if(cmd.getName().equals("hide")){
+				toggleInvisibility(player,true);
+			}
+			if(cmd.getName().equals("fakehide")){
+				toggleInvisibility(player,false);
+			} else if (cmd.getName().equals("nopickup")){
+				togglePickup(player);
+			}
+			return true;
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
