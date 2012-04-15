@@ -74,7 +74,7 @@ public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
 			if (!manuAFK.contains(player)) {
 				int i = playerTick.get(player) + 1;
 				playerTick.put(player, i);
-				if (i == 5) {
+				if (i == 90) {
 					setAfk(player, true);
 				}
 			}
