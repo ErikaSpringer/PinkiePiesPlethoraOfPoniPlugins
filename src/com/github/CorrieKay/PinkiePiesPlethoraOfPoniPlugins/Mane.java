@@ -50,9 +50,6 @@ public class Mane extends JavaPlugin implements Listener{
 		getCommand("afk").setExecutor(afk);
 	}
 	public void onDisable(){
-		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			Bukkit.getPluginManager().callEvent(new PSQuitEvent(player,true));
-		}
 		Bukkit.getScheduler().cancelTasks(this);
 	}
 	@EventHandler (priority = EventPriority.MONITOR)
