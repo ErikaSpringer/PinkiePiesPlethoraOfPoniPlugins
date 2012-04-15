@@ -7,6 +7,10 @@ commands:
         description: toggles manual afk
         usage: /afk toggles
         permission: pppopp.afk
+    afkdebug:
+       description: debug in afk
+       usage: /afkdebug
+       permission: pppopp.afk
     hide:
         description: toggles hidden status silently
         usage: /hide
