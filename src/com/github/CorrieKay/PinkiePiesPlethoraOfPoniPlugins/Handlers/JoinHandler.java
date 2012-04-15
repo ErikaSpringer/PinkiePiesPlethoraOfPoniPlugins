@@ -27,8 +27,8 @@ public class JoinHandler extends PoniCommandExecutor implements Listener {
 	private FileConfiguration config = null;
 	private final Mane instance;
 	
-	public JoinHandler(Mane instance){
-		super(instance, new String[] {});
+	public JoinHandler(Mane instance, String name){
+		super(instance, new String[] {},name);
 		configHandler = instance.getConfigHandler();
 		this.instance = instance;
 	}

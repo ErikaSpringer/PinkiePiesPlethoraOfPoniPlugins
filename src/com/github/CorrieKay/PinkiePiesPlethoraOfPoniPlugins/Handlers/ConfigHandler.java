@@ -22,8 +22,8 @@ import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExe
 
 public class ConfigHandler extends PoniCommandExecutor{
 	Mane instance;
-	public ConfigHandler(Mane instance){
-		super(instance, new String[] {});
+	public ConfigHandler(Mane instance, String name){
+		super(instance, new String[] {},name);
 		this.instance = instance;
 	}
 	/**

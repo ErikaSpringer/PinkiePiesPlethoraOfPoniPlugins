@@ -19,8 +19,8 @@ public class QuitHandler extends PoniCommandExecutor implements Listener {
 
 	private final ConfigHandler ch;
 	
-	public QuitHandler(Mane instance){
-		super(instance, new String[] {});
+	public QuitHandler(Mane instance, String name){
+		super(instance, new String[] {}, name);
 		ch = instance.getConfigHandler();
 	}
 	

@@ -8,8 +8,8 @@ import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExe
 
 public class Home extends PoniCommandExecutor {
 
-	public Home(Mane instance, String[] cmds) {
-		super(instance,cmds);
+	public Home(Mane instance, String[] cmds, String name) {
+		super(instance,cmds,name);
 	}
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2,

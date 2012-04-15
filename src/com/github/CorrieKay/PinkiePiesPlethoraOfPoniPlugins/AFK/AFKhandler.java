@@ -45,8 +45,8 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 	protected final Map<Player,Integer> playerTick = new HashMap<Player,Integer>();
 	protected final ArrayList<Player> manuAFK = new ArrayList<Player>();
 	
-	public AFKhandler (Mane instance, String[] cmds){
-		super(instance, cmds);
+	public AFKhandler (Mane instance, String[] cmds, String name){
+		super(instance, cmds,name);
 	}
 	public void initialize(){
 		super.registerCommands(new String[] {"afk"}, this);
@@ -80,11 +80,18 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 		}
 	}
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		sender.sendMessage("afk debug");
 		if(!(sender instanceof Player)){
 			sender.sendMessage("Player Command Only");
 			return true;
 		}
 		Player player = (Player)sender;
+		if(cmd.getName().equals("afkdebug")){
+			for(Player player2 : playerAfk.keySet()){
+				player.sendMessage(player2.getName()+" is afk?: "+playerAfk.get(player2));
+			}
+			return true;
+		}
 		if(instance.getInvisHandler().isHidden(player)){
 			player.sendMessage(ChatColor.GRAY+"Please dont mess with the AFK handler while invisible");
 			return true;

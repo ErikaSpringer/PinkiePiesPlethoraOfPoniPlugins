@@ -19,13 +19,13 @@ public class Mane extends JavaPlugin implements Listener{
 	private final ArrayList<PoniCommandExecutor> cmdList = new ArrayList<PoniCommandExecutor>();
 	
 	public void onEnable(){
-		cmdList.add(new ConfigHandler(this));
-		cmdList.add(new AFKhandler(this, new String[] {"afk"}));
-		cmdList.add(new InvisibilityHandler(this, new String[] {"hide","fakehide","nopickup"}));
-		cmdList.add(new JoinHandler(this));
-		cmdList.add(new QuitHandler(this));
-		cmdList.add(new ProtectionHandler(this, new String[] {"watertoggle","lavatoggle"}));
-		cmdList.add(new InventorySee(this, new String[] {"invsee","commitinventorychange"}));
+		cmdList.add(new ConfigHandler(this,"Config Handler"));
+		cmdList.add(new AFKhandler(this, new String[] {"afkdebug","afk"},"AFK Handler"));
+		cmdList.add(new InvisibilityHandler(this, new String[] {"hide","fakehide","nopickup"},"Invisibility Handler"));
+		cmdList.add(new JoinHandler(this,"Join Handler"));
+		cmdList.add(new QuitHandler(this,"Quit Handler"));
+		cmdList.add(new ProtectionHandler(this, new String[] {"watertoggle","lavatoggle"},"Protection Handler"));
+		cmdList.add(new InventorySee(this, new String[] {"invsee","commitinventorychange"},"Inventory See Handler"));
 		for(PoniCmdExeInterface handler : cmdList){
 			handler.initialize();
 		}

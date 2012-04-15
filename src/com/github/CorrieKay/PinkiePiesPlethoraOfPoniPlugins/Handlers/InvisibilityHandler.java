@@ -27,8 +27,8 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 	private final Mane instance;
 	private final ArrayList<Player> invisiblePlayers = new ArrayList<Player>();
 	private final ArrayList<Player> noPickup = new ArrayList<Player>();
-	public InvisibilityHandler(Mane instance, String[] cmds){
-		super(instance,cmds);
+	public InvisibilityHandler(Mane instance, String[] cmds, String name){
+		super(instance,cmds,name);
 		this.instance = instance;
 	}
 	@Override

@@ -19,15 +19,21 @@ public abstract class PoniCommandExecutor implements CommandExecutor, PoniCmdExe
 	protected final String pinkieSays = ChatColor.LIGHT_PURPLE+"Pinkie Pie: ";
 	protected final ChatColor pinkieColor = ChatColor.LIGHT_PURPLE;
 	protected final String[] cmds;
+	public final String name;
+	private final String pppopp = "[PPPoPP]: ";
 	
-	public PoniCommandExecutor(Mane plugin, String[] cmds){
+	public PoniCommandExecutor(Mane plugin, String[] cmds, String name){
 		instance = plugin;
 		this.cmds =cmds;
+		this.name = name;
 	}
 	@Override
 	public void initialize(){
+		System.out.print(pppopp+name+" initializing!");
 		registerCommands(cmds, this);
+		System.out.print(pppopp+name+" commands registered!");
 		if(this instanceof Listener){
+			System.out.print(pppopp+name+" is a listener! registering events!");
 			registerEvents();
 		}
 	}
@@ -36,6 +42,7 @@ public abstract class PoniCommandExecutor implements CommandExecutor, PoniCmdExe
 	}
 	public void registerCommands(String[] commandsToRegister, PoniCommandExecutor executor){
 		for(String cmds : commandsToRegister){
+			System.out.print(pppopp+name+" registering command "+cmds);
 			instance.getCommand(cmds).setExecutor(executor);
 			instance.getCommand(cmds).setPermissionMessage(ChatColor.LIGHT_PURPLE+"Pinkie Pie: Oh no! You cant do this :c");
 		}
