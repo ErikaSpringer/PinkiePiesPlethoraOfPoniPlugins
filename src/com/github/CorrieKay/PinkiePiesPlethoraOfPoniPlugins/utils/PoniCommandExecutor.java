@@ -15,7 +15,7 @@ import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 public abstract class PoniCommandExecutor implements CommandExecutor{
 	
 	protected final Mane instance;
-	protected final String pinkieSays = ChatColor.LIGHT_PURPLE+"[ServerGuardian] Pinkie Pie: ";
+	protected final String pinkieSays = ChatColor.LIGHT_PURPLE+"Pinkie Pie: ";
 	protected final ChatColor pinkieColor = ChatColor.LIGHT_PURPLE;
 	
 	public PoniCommandExecutor(Mane plugin){
@@ -26,10 +26,6 @@ public abstract class PoniCommandExecutor implements CommandExecutor{
 		for(String cmds : commandsToRegister){
 			instance.getCommand(cmds).setExecutor(executor);
 		}
-	}
-	protected boolean cantDo(Player player){
-		player.sendMessage(pinkieSays+"Oh no! Im sorry, but you dont have permission to do this! :c");
-		return true;
 	}
 	protected boolean pinkieSay(String message, Player player){
 		player.sendMessage(pinkieSays+message);
