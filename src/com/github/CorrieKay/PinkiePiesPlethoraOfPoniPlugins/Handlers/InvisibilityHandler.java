@@ -177,4 +177,12 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 			event.setCancelled(true);
 		}
 	}
+	@Override
+	public void furtherInitialization() {
+		
+	}
+	@Override
+	public PoniCommandExecutor getThis(){
+		return this;
+	}
 }

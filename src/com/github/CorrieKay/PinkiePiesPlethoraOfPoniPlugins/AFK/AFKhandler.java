@@ -48,8 +48,7 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 	public AFKhandler (Mane instance, String[] cmds, String name){
 		super(instance, cmds,name);
 	}
-	public void initialize(){
-		super.registerCommands(new String[] {"afk"}, this);
+	public void furtherInitialization(){
 		Bukkit.getScheduler().scheduleAsyncRepeatingTask(instance, new AfkTimerTask(this), 0, 20);
 	}
 	public boolean isAfk(Player player){
@@ -89,6 +88,12 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 		if(cmd.getName().equals("afkdebug")){
 			for(Player player2 : playerAfk.keySet()){
 				player.sendMessage(player2.getName()+" is afk?: "+playerAfk.get(player2));
+			}
+			for(Player player2:playerTick.keySet()){
+				player.sendMessage(player2.getName()+" has "+playerTick.get(player2)+" seconds afk");
+			}
+			for(Player player2: manuAFK){
+				player.sendMessage(player2.getName()+" in manual afk");
 			}
 			return true;
 		}
@@ -140,5 +145,9 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 	@EventHandler
 	public void onBreak(BlockBreakEvent event){
 		playerActivity(event.getPlayer());
+	}
+	@Override
+	public PoniCommandExecutor getThis(){
+		return this;
 	}
 }

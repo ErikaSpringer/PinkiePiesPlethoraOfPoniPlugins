@@ -116,4 +116,12 @@ public class ConfigHandler extends PoniCommandExecutor{
 			String[] arg3) {
 		return false;
 	}
+	@Override
+	public void furtherInitialization() {
+		
+	}
+	@Override
+	public PoniCommandExecutor getThis(){
+		return this;
+	}
 }

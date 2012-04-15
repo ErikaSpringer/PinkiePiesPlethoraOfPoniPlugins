@@ -20,15 +20,18 @@ public class Mane extends JavaPlugin implements Listener{
 	
 	public void onEnable(){
 		cmdList.add(new ConfigHandler(this,"Config Handler"));
-		cmdList.add(new AFKhandler(this, new String[] {"afkdebug","afk"},"AFK Handler"));
+		cmdList.add(new AFKhandler(this, new String[] {"afk","afkdebug"}, "Afk Handler"));
 		cmdList.add(new InvisibilityHandler(this, new String[] {"hide","fakehide","nopickup"},"Invisibility Handler"));
 		cmdList.add(new JoinHandler(this,"Join Handler"));
 		cmdList.add(new QuitHandler(this,"Quit Handler"));
 		cmdList.add(new ProtectionHandler(this, new String[] {"watertoggle","lavatoggle"},"Protection Handler"));
 		cmdList.add(new InventorySee(this, new String[] {"invsee","commitinventorychange"},"Inventory See Handler"));
+		System.out.print("-----PPPoPP initializing Handlers-----");
 		for(PoniCmdExeInterface handler : cmdList){
 			handler.initialize();
+			System.out.println(" ");
 		}
+		System.out.print("--------------------------------------");
 		Bukkit.getScheduler().scheduleAsyncDelayedTask(this, new BootTask());
 	}
 	

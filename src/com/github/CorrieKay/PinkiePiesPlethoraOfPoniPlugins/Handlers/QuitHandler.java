@@ -52,4 +52,12 @@ public class QuitHandler extends PoniCommandExecutor implements Listener {
 			String label, String[] args) {
 		return false;
 	}
+	@Override
+	public void furtherInitialization() {
+		
+	}
+	@Override
+	public PoniCommandExecutor getThis(){
+		return this;
+	}
 }

@@ -208,4 +208,12 @@ public class ProtectionHandler extends PoniCommandExecutor implements Listener{
 		}
 		return true;
 	}
+	@Override
+	public void furtherInitialization() {
+		
+	}
+	@Override
+	public PoniCommandExecutor getThis(){
+		return this;
+	}
 }

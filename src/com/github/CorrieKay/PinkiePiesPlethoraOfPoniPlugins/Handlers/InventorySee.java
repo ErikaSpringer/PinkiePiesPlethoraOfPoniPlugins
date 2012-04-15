@@ -229,4 +229,12 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 		}
 		return stringInventory;
 	}
+	@Override
+	public void furtherInitialization() {
+		
+	}
+	@Override
+	public PoniCommandExecutor getThis(){
+		return this;
+	}
 }
