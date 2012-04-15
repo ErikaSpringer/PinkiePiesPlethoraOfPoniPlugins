@@ -46,14 +46,15 @@ public class JoinHandler implements Listener {
 			}
 			config.set("ipAddress", ip);
 			config.set("lastLogon", getSystemDate());
-		}
-			if(config.getBoolean("viewingInventory")){
-				//TODO: code for invsee here
-			} else {
-				//TODO: more code for invsee
 			}
 			player.setDisplayName(config.getString("nickname"));
 			MOTD(player);
+			if(config.getBoolean("update")){
+				player.getInventory().setContents(InventorySee.toInventory(config));
+				//update location
+				//update game mode
+				config.set("update",false);
+			}
 		}
 		Configuration stream = YamlConfiguration.loadConfiguration(instance.getResource("config.yml"));
 		config.setDefaults((Configuration) stream);
