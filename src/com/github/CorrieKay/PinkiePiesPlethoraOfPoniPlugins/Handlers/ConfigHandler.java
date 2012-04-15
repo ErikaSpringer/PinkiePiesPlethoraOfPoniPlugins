@@ -7,20 +7,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSElements;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExecutor;
 
-@SuppressWarnings("unused")
-public class ConfigHandler {
+
+public class ConfigHandler extends PoniCommandExecutor{
 	Mane instance;
 	public ConfigHandler(Mane instance){
+		super(instance, new String[] {});
 		this.instance = instance;
 	}
 	/**
@@ -107,5 +110,10 @@ public class ConfigHandler {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date(time);
 		return dateFormat.format(date);
+	}
+	@Override
+	public boolean onCommand(CommandSender arg0, Command arg1, String arg2,
+			String[] arg3) {
+		return false;
 	}
 }

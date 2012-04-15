@@ -37,6 +37,7 @@ public abstract class PoniCommandExecutor implements CommandExecutor, PoniCmdExe
 	public void registerCommands(String[] commandsToRegister, PoniCommandExecutor executor){
 		for(String cmds : commandsToRegister){
 			instance.getCommand(cmds).setExecutor(executor);
+			instance.getCommand(cmds).setPermissionMessage(ChatColor.LIGHT_PURPLE+"Pinkie Pie: Oh no! You cant do this :c");
 		}
 	}
 	protected boolean pinkieSay(String message, Player player){

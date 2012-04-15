@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,13 +20,15 @@ import org.bukkit.event.Listener;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSElements;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSJoinEvent;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExecutor;
 
-public class JoinHandler implements Listener {
+public class JoinHandler extends PoniCommandExecutor implements Listener {
 	private final ConfigHandler configHandler;
 	private FileConfiguration config = null;
 	private final Mane instance;
 	
 	public JoinHandler(Mane instance){
+		super(instance, new String[] {});
 		configHandler = instance.getConfigHandler();
 		this.instance = instance;
 	}
@@ -79,5 +83,10 @@ public class JoinHandler implements Listener {
 	    }
 	    s = s.replaceAll("<player>", player.getDisplayName());
 	    return s;
+	}
+	@Override
+	public boolean onCommand(CommandSender sender, Command command,
+			String label, String[] args) {
+		return false;
 	}
 }

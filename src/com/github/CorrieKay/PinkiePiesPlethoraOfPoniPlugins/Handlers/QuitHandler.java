@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,12 +13,14 @@ import org.bukkit.event.Listener;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Teleportation.TeleUtils;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExecutor;
 
-public class QuitHandler implements Listener {
+public class QuitHandler extends PoniCommandExecutor implements Listener {
 
 	private final ConfigHandler ch;
 	
 	public QuitHandler(Mane instance){
+		super(instance, new String[] {});
 		ch = instance.getConfigHandler();
 	}
 	
@@ -41,5 +45,11 @@ public class QuitHandler implements Listener {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		return dateFormat.format(cal.getTime());
+	}
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command command,
+			String label, String[] args) {
+		return false;
 	}
 }
