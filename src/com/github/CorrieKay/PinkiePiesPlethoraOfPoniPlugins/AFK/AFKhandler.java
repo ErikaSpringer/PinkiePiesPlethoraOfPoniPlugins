@@ -15,12 +15,11 @@
  * specific players.
  */
 
-package com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers;
+package com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.AFK;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimerTask;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,19 +37,20 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSJoinEvent;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExecutor;
 
-public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
+public class AFKhandler extends PoniCommandExecutor implements Listener, CommandExecutor{
 	
-	private final Map<Player,Boolean> playerAfk = new HashMap<Player,Boolean>();
-	private final Map<Player,Integer> playerTick = new HashMap<Player,Integer>();
-	private final ArrayList<Player> manuAFK = new ArrayList<Player>();
-	private final Mane instance;
+	protected final Map<Player,Boolean> playerAfk = new HashMap<Player,Boolean>();
+	protected final Map<Player,Integer> playerTick = new HashMap<Player,Integer>();
+	protected final ArrayList<Player> manuAFK = new ArrayList<Player>();
 	
-	public AFKhandler (Mane instance){
-		this.instance = instance;
+	public AFKhandler (Mane instance, String[] cmds){
+		super(instance, cmds);
 	}
 	public void initialize(){
-		Bukkit.getScheduler().scheduleAsyncRepeatingTask(instance, this, 0, 20);
+		super.registerCommands(new String[] {"afk"}, this);
+		Bukkit.getScheduler().scheduleAsyncRepeatingTask(instance, new AfkTimerTask(this), 0, 20);
 	}
 	public boolean isAfk(Player player){
 		if(playerAfk.containsKey(player)){
@@ -67,17 +67,6 @@ public class AFKhandler extends TimerTask implements Listener, CommandExecutor{
 		} else {
 			playerAfk.remove(player);
 			Bukkit.getServer().broadcastMessage(ChatColor.GRAY+player.getDisplayName()+ChatColor.GRAY+" is no longer afk.");
-		}
-	}
-	public void run() {
-		for(Player player : playerTick.keySet()){
-			if (!manuAFK.contains(player)) {
-				int i = playerTick.get(player) + 1;
-				playerTick.put(player, i);
-				if (i == 90) {
-					setAfk(player, true);
-				}
-			}
 		}
 	}
 	private void playerActivity(Player player){
