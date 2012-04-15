@@ -3,6 +3,7 @@ package com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,6 +17,7 @@ import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.ConfigHandl
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InventorySee;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InvisibilityHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.JoinHandler;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.ProtectionHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.QuitHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSJoinEvent;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
@@ -25,26 +27,32 @@ public class Mane extends JavaPlugin implements Listener{
 	private final ConfigHandler ch = new ConfigHandler(this);
 	private final JoinHandler jh = new JoinHandler(this);
 	private final QuitHandler qh = new QuitHandler(this);
+	private final ProtectionHandler ph = new ProtectionHandler(this, new String[] {"watertoggle","lavatoggle"});
 	private final InvisibilityHandler ih = new InvisibilityHandler(this, new String[] {"hide","fakehide","nopickup"});
-	private final InventorySee is = new InventorySee(this, new String[] {"invsee"});
+	private final InventorySee is = new InventorySee(this, new String[] {"invsee","commitinventorychange"});
 	
 	public void onEnable(){
 		PluginManager pm = Bukkit.getPluginManager();
 		for(String string : YamlConfiguration.loadConfiguration(this.getResource("plugin.yml")).getConfigurationSection("commands").getKeys(false)){
-			this.getCommand(string).setPermissionMessage(ChatColor.LIGHT_PURPLE+"[ServerGuardian] Pinkie Pie: You cant do this :c");
+			this.getCommand(string).setPermissionMessage(ChatColor.LIGHT_PURPLE+"Pinkie Pie: Oh no! You cant do this :c");
 		}
 		afk.initialize();
 		ih.initialize();
 		is.initialize();
+		ph.initialize();
 		pm.registerEvents(this, this);
 		pm.registerEvents(ih, this);
 		pm.registerEvents(jh, this);
 		pm.registerEvents(qh, this);
 		pm.registerEvents(afk, this);
 		pm.registerEvents(is, this);
+		pm.registerEvents(ph,this);
 		getCommand("afk").setExecutor(afk);
 	}
 	public void onDisable(){
+		for(Player player : Bukkit.getServer().getOnlinePlayers()){
+			Bukkit.getPluginManager().callEvent(new PSQuitEvent(player,true));
+		}
 		Bukkit.getScheduler().cancelTasks(this);
 	}
 	@EventHandler (priority = EventPriority.MONITOR)
