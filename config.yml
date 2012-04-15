@@ -1,0 +1,34 @@
+name: new
+online: true
+muted: false
+god: false
+afk: false
+gamemode: 0
+invisible: false
+viewingInventory: false
+nickname: new
+chatChannel: eq
+listenChannels:
+- eq
+ipAddress: {}
+horn:
+  left: {}
+  right: {}
+  on: false
+ban:
+  banned: false
+  banReason: {}
+warnings:
+  warning1: {}
+  warning2: {}
+  warning3: {}
+firstLogon: n/a
+lastLogon: n/a
+lastLogout: n/a
+warps:
+  other:
+    back: {}
+    home: {}
+    offline: {}
+inventory: {}
+update: false

@@ -22,20 +22,15 @@ import org.bukkit.inventory.ItemStack;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExecutor;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.UpdateInventory;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.tasks.UpdateInventory;
 
 public class InventorySee extends PoniCommandExecutor implements Listener{
 	
 	private final Mane instance;
 	private HashMap<Player,Player> viewingInventoryLive = new HashMap<Player,Player>();
-	private final String[] cmds;
 	public InventorySee(Mane instance, String[] cmds){
-		super(instance);
+		super(instance,cmds);
 		this.instance = instance;
-		this.cmds = cmds;
-	}
-	public void initialize(){
-		super.registerCommands(cmds, this);
 	}
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

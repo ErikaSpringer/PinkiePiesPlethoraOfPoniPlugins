@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Teleportation.TeleUtils;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSQuitEvent;
 
 public class QuitHandler implements Listener {
@@ -24,11 +25,15 @@ public class QuitHandler implements Listener {
 		FileConfiguration config = ch.getPlayerConfig(event.getPlayer());
 		config.set("lastLogout", getSystemDate());
 		config.set("online", false);
-		if(!config.getBoolean("viewingInventory")){
-			config.set("inventory", InventorySee.toStringList(event.getPlayer().getInventory().getContents()));
-		} else {
-			event.getPlayer().getInventory().setContents(InventorySee.toInventory(config));
-			config.set("viewingInventory", false);
+		TeleUtils.setWarp(event.getPlayer().getLocation(), "warps.other.offline", config);
+		if (event.isQuitting()) {
+			if (!config.getBoolean("viewingInventory")) {
+				config.set("inventory",InventorySee.toStringList(event.getPlayer().getInventory().getContents()));
+			} else {
+				event.getPlayer().getInventory()
+						.setContents(InventorySee.toInventory(config));
+				config.set("viewingInventory", false);
+			}
 		}
 		ch.savePlayerConfig(config);
 	}

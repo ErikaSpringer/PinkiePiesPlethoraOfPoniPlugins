@@ -9,19 +9,31 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
 
-public abstract class PoniCommandExecutor implements CommandExecutor{
+public abstract class PoniCommandExecutor implements CommandExecutor, PoniCmdExeInterface{
 	
 	protected final Mane instance;
 	protected final String pinkieSays = ChatColor.LIGHT_PURPLE+"Pinkie Pie: ";
 	protected final ChatColor pinkieColor = ChatColor.LIGHT_PURPLE;
+	protected final String[] cmds;
 	
-	public PoniCommandExecutor(Mane plugin){
+	public PoniCommandExecutor(Mane plugin, String[] cmds){
 		instance = plugin;
+		this.cmds =cmds;
 	}
-
+	@Override
+	public void initialize(){
+		registerCommands(cmds, this);
+		if(this instanceof Listener){
+			registerEvents();
+		}
+	}
+	public void registerEvents(){
+		Bukkit.getPluginManager().registerEvents((Listener) this, instance);
+	}
 	public void registerCommands(String[] commandsToRegister, PoniCommandExecutor executor){
 		for(String cmds : commandsToRegister){
 			instance.getCommand(cmds).setExecutor(executor);
