@@ -44,50 +44,82 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 		}
 		Player player = (Player)sender;
 		FileConfiguration config = instance.getConfigHandler().getPlayerConfig(player);
-		if(config.getBoolean("viewingInventory")){//theyre viewing an inventory
-			if(args.length==0){//they issued "/invsee" they want to go back to their inventory
-				stopListeningToInventory(player);
-				player.getInventory().setContents(toInventory(config));
-				config.set("viewingInventory", false);
-				instance.getConfigHandler().savePlayerConfig(config);
-				return pinkieSay("*hands you your stuff back* Here you go! Its your inventory!",player);//viewing their inventory
+		if (cmd.getName().equals("invsee")) {
+			if (config.getBoolean("viewingInventory")) {//theyre viewing an inventory
+				if (args.length == 0) {//they issued "/invsee" they want to go back to their inventory
+					stopListeningToInventory(player);
+					player.getInventory().setContents(toInventory(config));
+					config.set("viewingInventory", false);
+					instance.getConfigHandler().savePlayerConfig(config);
+					return pinkieSay(
+							"*hands you your stuff back* Here you go! Its your inventory!",
+							player);//viewing their inventory
+				}
 			}
-		}
-		if(args.length == 0){//theyre viewing their inventory, and wanna see another inventory, but havnt specified another player
-			return pinkieSay(noPlayerSpecified(), player);
-		}
-		boolean isCorrie = player.getName().equals("TheQueenOfPink");
-		ArrayList<Player> onlinePlayers = getPlayerOnline(args[0], isCorrie);
-		if(onlinePlayers == null){//player is offline, or not found, check configs now.
-			ArrayList<String> offlinePlayers = getPlayerOffline(args[0]);
-			if(offlinePlayers == null){//no matches found, try again!
-				return pinkieSay(playerNotOnline(),player);
+			if (args.length == 0) {//theyre viewing their inventory, and wanna see another inventory, but havnt specified another player
+				return pinkieSay(noPlayerSpecified(), player);
 			}
-			if(offlinePlayers.size()>1){//too many offline matches found, please narrow your search.
-				return pinkieSay(tooManyMatches(offlinePlayers),player);
-			}//single offline player found!
-			String offlinePlayer = offlinePlayers.get(0);
-			config.set("inventory", toStringList(player.getInventory().getContents()));
-			instance.getConfigHandler().savePlayerConfig(config);
-			FileConfiguration playerConfig = instance.getConfigHandler().getPlayerConfig(offlinePlayer);
-			player.getInventory().setContents(toInventory(playerConfig));
+			boolean isCorrie = player.getName().equals("TheQueenOfPink");
+			ArrayList<Player> onlinePlayers = getPlayerOnline(args[0], isCorrie);
+			if (onlinePlayers == null) {//player is offline, or not found, check configs now.
+				ArrayList<String> offlinePlayers = getPlayerOffline(args[0]);
+				if (offlinePlayers == null) {//no matches found, try again!
+					return pinkieSay(playerNotOnline(), player);
+				}
+				if (offlinePlayers.size() > 1) {//too many offline matches found, please narrow your search.
+					return pinkieSay(tooManyMatches(offlinePlayers), player);
+				}//single offline player found!
+				String offlinePlayer = offlinePlayers.get(0);
+				try {
+					config.set("inventory", toStringList(player.getInventory().getContents()));
+					instance.getConfigHandler().savePlayerConfig(config);
+					FileConfiguration playerConfig = instance.getConfigHandler().getPlayerConfig(offlinePlayer);
+					player.getInventory().setContents(toInventory(playerConfig));
+					config.set("viewingInventory", true);
+					instance.getConfigHandler().savePlayerConfig(config);
+					return pinkieSay(
+							"Lookie here! its " + offlinePlayers.get(0)
+									+ "'s inventory!", player);//looking at a players inventory!
+				} catch (Exception e) {
+					player.getInventory().setContents(toOldInventory(instance.getConfigHandler().getPlayerConfig(offlinePlayer)));
+					config.set("viewingInventory", true);
+					instance.getConfigHandler().savePlayerConfig(config);
+					return pinkieSay("Their inventory looks weird, but here it is!",player);
+				}
+			}//online players have been found
+			if (onlinePlayers.size() > 1) {//too many online players
+				return pinkieSay(tooManyMatches(onlinePlayers), player);
+			}
+			Player player2 = onlinePlayers.get(0);//just one aaaaaw yeeeeah.
+			config.set("inventory", toStringList(player.getInventory()
+					.getContents()));
+			player.getInventory().setContents(
+					player2.getInventory().getContents());
+			listenToInventory(player, player2);
+			if (instance.getInvisHandler().isPickingUp(player)) {
+				instance.getInvisHandler().pickupOff(player);
+			}
 			config.set("viewingInventory", true);
 			instance.getConfigHandler().savePlayerConfig(config);
-			return pinkieSay("Lookie here! its "+offlinePlayers.get(0)+"'s inventory!",player);//looking at a players inventory!
-		}//online players have been found
-		if(onlinePlayers.size()>1){//too many online players
-			return pinkieSay(tooManyMatches(onlinePlayers), player);
-		}
-		Player player2 = onlinePlayers.get(0);//just one aaaaaw yeeeeah.
-		config.set("inventory", toStringList(player.getInventory().getContents()));
-		player.getInventory().setContents(player2.getInventory().getContents());
-		listenToInventory(player,player2);
-		if (instance.getInvisHandler().isPickingUp(player)) {
-			instance.getInvisHandler().pickupOff(player);
-		}
-		config.set("viewingInventory",true);
-		instance.getConfigHandler().savePlayerConfig(config);
-		return true;
+			return true;
+		} else if (cmd.getName().equals("commitinventorychange")){
+			boolean isCorrie = player.getName().equals("TheQueenOfPink");
+			ArrayList<Player> onlinePlayers = getPlayerOnline(args[0],isCorrie);
+			if(onlinePlayers==null){
+				ArrayList<String> offlinePlayers = getPlayerOffline(args[0]);
+				if(offlinePlayers == null){
+					return pinkieSay(playerNotOnline(),player);
+				} if(offlinePlayers.size()>1){
+					return pinkieSay(tooManyMatches(offlinePlayers),player);
+				} else {
+					FileConfiguration playerConfig = instance.getConfigHandler().getPlayerConfig(offlinePlayers.get(0));
+					playerConfig.set("update",true);
+					playerConfig.set("inventory", toStringList(player.getInventory().getContents()));
+					instance.getConfigHandler().savePlayerConfig(playerConfig);
+					return pinkieSay("Inventory change committed! Time to party!",player);
+				}
+			} else return pinkieSay("Hey silly, manually modify their inventory using /invsee! Pfft, silly filly!",player);
+		} return true;
 	}
 	/**
 	 * @Functions here deal with live inventory viewing.
@@ -169,6 +201,17 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 				items[number] = new ItemStack(Material.AIR);
 			}
 			number++;
+		}
+		return items;
+	}
+	public static ItemStack[] toOldInventory(FileConfiguration config){
+		List<String> inventoryString = config.getStringList("inventory");
+		ItemStack[] items = new ItemStack[36];
+		int count = 0;
+		for(String string : inventoryString){
+			String[] stack = string.split(", ");
+			items[count] = new ItemStack(Material.getMaterial(stack[0]),Integer.parseInt(stack[1]));
+			count++;
 		}
 		return items;
 	}
