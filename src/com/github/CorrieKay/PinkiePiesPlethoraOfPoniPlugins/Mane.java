@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.AFK.AFKhandler;
-import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.BanHammer;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.BanHammer.BanHammer;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.ConfigHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InventorySee;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InvisibilityHandler;
