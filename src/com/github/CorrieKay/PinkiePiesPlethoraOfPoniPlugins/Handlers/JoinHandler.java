@@ -2,6 +2,7 @@ package com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -41,18 +42,20 @@ public class JoinHandler extends PoniCommandExecutor implements Listener {
 		if(config != null&&!event.isCancelled()){
 			event.setJoinMessage(ChatColor.RED+config.getString("nickname")+ChatColor.AQUA+" has returned to Equestria!");
 		}
-		
 		if(event.isJoining()){
 			if(!player.hasPlayedBefore()||(player.hasPlayedBefore()&&config == null)){
 			Bukkit.getLogger().info("New Player detected: creating configuration");
 			config = configHandler.createNewPlayerConfig(player);
-			List<String> ip = config.getStringList("ipAddress");
+			}
+			config.set("lastLogon", getSystemDate());
+			List<String> ip = new ArrayList<String>();
+			if(config.isList("ipAddress")){
+				ip = config.getStringList("ipAddress");
+			}
 			if (!ip.contains(player.getAddress().toString().substring(1,player.getAddress().toString().indexOf(":")))){
 				ip.add(player.getAddress().toString().substring(1,player.getAddress().toString().indexOf(":")));
 			}
 			config.set("ipAddress", ip);
-			config.set("lastLogon", getSystemDate());
-			}
 			player.setDisplayName(config.getString("nickname"));
 			MOTD(player);
 			if(config.getBoolean("update")){
