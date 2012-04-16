@@ -7,40 +7,49 @@ commands:
         description: toggles manual afk
         usage: /afk toggles
         permission: pppopp.afk
+        executor: Afk Handler
     afkdebug:
        description: debug in afk
        usage: /afkdebug
        permission: pppopp.afk
+       executor: Afk Handler
     hide:
         description: toggles hidden status silently
         usage: /hide
         permission: pppopp.hide
+        executor: Invisibility Handler
     fakehide:
         description: toggles hidden status publicly, with quit/join messages
         usage: /fakehide
         permission: pppopp.hide
+        executor: Invisibility Handler
     nopickup:
         description: toggles no pickup of items
         usage: /nopickup
         aliases: np
         permission: pppopp.nopickup
+        executor: Invisibility Handler
     invsee:
         description: veiws another users inventory. if the user is online, you can view and edit in real time
         usage: /invsee <player>
         permission: pppopp.invsee
+        executor: Inventory See Handler
     commitinventorychange:
         description: commits an inventory change to an offline player
         usage: /commitinventorychange <player>
         permission: pppopp.invsee
         aliases: cic
+        executor: Inventory See Handler
     watertoggle:
         description: toggles waterflow
         usage: /watertoggle
         permission: pppopp.waterflowtoggle
+        executor: Protection Handler
     lavatoggle:
         description: toggles lavaflow
         usage: /lavatoggle
         permission: pppopp.lavaflowtoggle
+        executor: Protection Handler
 permissions:
     pppopp.afk:
         default: false

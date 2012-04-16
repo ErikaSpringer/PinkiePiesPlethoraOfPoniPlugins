@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
@@ -18,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Mane;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Teleportation.TeleUtils;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSElements;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PSJoinEvent;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExecutor;
@@ -55,8 +57,8 @@ public class JoinHandler extends PoniCommandExecutor implements Listener {
 			MOTD(player);
 			if(config.getBoolean("update")){
 				player.getInventory().setContents(InventorySee.toInventory(config));
-				//update location
-				//update game mode
+				player.teleport(TeleUtils.getLocationFromString(config.getStringList("warps.other.offline")));
+				player.setGameMode(GameMode.getByValue(config.getInt("gamemode")));
 				config.set("update",false);
 			}
 		}

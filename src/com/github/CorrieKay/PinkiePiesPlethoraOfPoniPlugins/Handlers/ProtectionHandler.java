@@ -43,11 +43,6 @@ public class ProtectionHandler extends PoniCommandExecutor implements Listener{
 		super(instance,cmds,name);
 		this.instance = instance;
 	}
-	@Override
-	public void initialize(){
-		super.registerCommands(super.cmds, this);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, new lavaNerfTimerDown(this), 0, 20);
-	}
 	public HashMap<Block,Integer> getNerfedLava(){
 		return lavaToNerf;
 	}
@@ -210,7 +205,7 @@ public class ProtectionHandler extends PoniCommandExecutor implements Listener{
 	}
 	@Override
 	public void furtherInitialization() {
-		
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, new lavaNerfTimerDown(this), 0, 20);
 	}
 	@Override
 	public PoniCommandExecutor getThis(){

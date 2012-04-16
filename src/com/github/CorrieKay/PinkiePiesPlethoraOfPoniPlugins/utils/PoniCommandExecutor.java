@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,7 +30,6 @@ public abstract class PoniCommandExecutor implements CommandExecutor, PoniCmdExe
 	@Override
 	public void initialize(){
 		System.out.print(pppopp+name+" initializing!");
-		registerCommands(cmds, this);
 		if (cmds.length >0) {
 			System.out.print(pppopp + name + " commands registered!");
 		}
@@ -44,16 +42,10 @@ public abstract class PoniCommandExecutor implements CommandExecutor, PoniCmdExe
 	public void registerEvents(PoniCommandExecutor executor){
 		Bukkit.getPluginManager().registerEvents((Listener)executor, instance);
 	}
-	public void registerCommands(String[] commandsToRegister, PoniCommandExecutor executor){
-		for(String cmds : commandsToRegister){
+	public void registerCommand(String cmds, PoniCommandExecutor executor){
 			System.out.print(pppopp+name+" registering command "+cmds);
-			Command cmd = instance.getCommand(cmds);
-			if(cmd==null){
-				Bukkit.getLogger().severe("ERROR: command "+cmds+" Not found!");
-			}
 			instance.getCommand(cmds).setExecutor(executor);
 			instance.getCommand(cmds).setPermissionMessage(ChatColor.LIGHT_PURPLE+"Pinkie Pie: Oh no! You cant do this :c");
-		}
 	}
 	protected boolean pinkieSay(String message, Player player){
 		player.sendMessage(pinkieSays+message);
