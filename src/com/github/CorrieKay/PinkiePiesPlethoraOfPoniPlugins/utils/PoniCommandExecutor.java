@@ -46,6 +46,10 @@ public abstract class PoniCommandExecutor implements CommandExecutor, PoniCmdExe
 		player.sendMessage(pinkieSays+message);
 		return true;
 	}
+	protected boolean pinkieSay(String message, CommandSender sender){
+		sender.sendMessage(pinkieSays+message);
+		return true;
+	}
 	protected boolean senderCant(CommandSender sender){
 		sender.sendMessage("You aren't a player");
 		return true;
