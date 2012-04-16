@@ -8,11 +8,6 @@ commands:
         usage: /afk toggles
         permission: pppopp.afk
         executor: Afk Handler
-    afkdebug:
-       description: debug in afk
-       usage: /afkdebug
-       permission: pppopp.afk
-       executor: Afk Handler
     hide:
         description: toggles hidden status silently
         usage: /hide
@@ -50,6 +45,26 @@ commands:
         usage: /lavatoggle
         permission: pppopp.lavaflowtoggle
         executor: Protection Handler
+    ban:
+        description: bans a player
+        usage: /ban <player> <reason>
+        permission: pppopp.ban
+        executor: BanHammer
+    kick:
+        description: kicks a player
+        usage: /kick <player> <reason>
+        permission: pppopp.kick
+        executor: BanHammer
+    warn:
+        description: warns a player
+        usage: /warn <player> <reason>
+        permission: pppopp.warn
+        executor: BanHammer
+    convertbans:
+        description: converts all bans into PPPOPP bans
+        usage: /convertbans
+        permission: pppopp.ban
+        executor: BanHammer
 permissions:
     pppopp.afk:
         default: false
@@ -64,4 +79,10 @@ permissions:
     pppopp.waterflowtoggle:
         default: false
     pppopp.lavaflowtoggle:
+        default: false
+    pppopp.ban:
+        default: false
+    pppopp.kick:
+        default: false
+    pppopp.warn:
         default: false
