@@ -27,8 +27,8 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 	private final Mane instance;
 	private final ArrayList<Player> invisiblePlayers = new ArrayList<Player>();
 	private final ArrayList<Player> noPickup = new ArrayList<Player>();
-	public InvisibilityHandler(Mane instance, String[] cmds, String name){
-		super(instance,cmds,name);
+	public InvisibilityHandler(Mane instance, String name){
+		super(instance,name);
 		this.instance = instance;
 	}
 	public boolean isHidden(Player player){
@@ -151,6 +151,8 @@ public class InvisibilityHandler extends PoniCommandExecutor implements Listener
 				if(corrie!=null){
 					corrie.sendMessage(ChatColor.DARK_GRAY+event.getPlayer().getDisplayName()+ChatColor.DARK_GRAY+" has logged in silently");
 				}
+			} else {
+				turnOff(event.getPlayer(), true);
 			}
 			for(Player player : Bukkit.getServer().getOnlinePlayers()){
 				if(!invisiblePlayers.contains(player)){

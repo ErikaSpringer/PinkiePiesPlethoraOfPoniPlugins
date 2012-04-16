@@ -28,8 +28,8 @@ public class InventorySee extends PoniCommandExecutor implements Listener{
 	
 	private final Mane instance;
 	private HashMap<Player,Player> viewingInventoryLive = new HashMap<Player,Player>();
-	public InventorySee(Mane instance, String[] cmds, String name){
-		super(instance,cmds,name);
+	public InventorySee(Mane instance, String name){
+		super(instance,name);
 		this.instance = instance;
 	}
 	@Override

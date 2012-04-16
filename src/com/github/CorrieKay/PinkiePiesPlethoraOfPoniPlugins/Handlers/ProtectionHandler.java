@@ -39,8 +39,8 @@ public class ProtectionHandler extends PoniCommandExecutor implements Listener{
 	private boolean lavaFlow = false;
 	boolean creeperBuff = false;
 	private HashMap<Block,Integer> lavaToNerf = new HashMap<Block,Integer>();
-	public ProtectionHandler(Mane instance, String[] cmds, String name){
-		super(instance,cmds,name);
+	public ProtectionHandler(Mane instance, String name){
+		super(instance,name);
 		this.instance = instance;
 	}
 	public HashMap<Block,Integer> getNerfedLava(){

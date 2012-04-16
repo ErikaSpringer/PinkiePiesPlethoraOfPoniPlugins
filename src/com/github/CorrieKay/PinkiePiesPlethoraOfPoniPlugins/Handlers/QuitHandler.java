@@ -20,7 +20,7 @@ public class QuitHandler extends PoniCommandExecutor implements Listener {
 	private final ConfigHandler ch;
 	
 	public QuitHandler(Mane instance, String name){
-		super(instance, new String[] {}, name);
+		super(instance, name);
 		ch = instance.getConfigHandler();
 	}
 	
@@ -29,6 +29,7 @@ public class QuitHandler extends PoniCommandExecutor implements Listener {
 		FileConfiguration config = ch.getPlayerConfig(event.getPlayer());
 		config.set("lastLogout", getSystemDate());
 		config.set("online", false);
+		config.set("afk",false);
 		TeleUtils.setWarp(event.getPlayer().getLocation(), "warps.other.offline", config);
 		if (event.isQuitting()) {
 			if (!config.getBoolean("viewingInventory")) {

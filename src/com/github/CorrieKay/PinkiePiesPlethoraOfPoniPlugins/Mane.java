@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.AFK.AFKhandler;
+import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.BanHammer;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.ConfigHandler;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InventorySee;
 import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.Handlers.InvisibilityHandler;
@@ -28,13 +29,15 @@ public class Mane extends JavaPlugin implements Listener{
 	private final HashMap<String,PoniCommandExecutor> cmdList = new HashMap<String,PoniCommandExecutor>();
 	
 	public void onEnable(){
+		Bukkit.getPluginManager().registerEvents(this, this);
 		cmdList.put("Config Handler",new ConfigHandler(this,"Config Handler"));
-		cmdList.put("Afk Handler",new AFKhandler(this, new String[] {"afk","afkdebug"}, "Afk Handler"));
-		cmdList.put("Invisibility Handler",new InvisibilityHandler(this, new String[] {"hide","fakehide","nopickup"},"Invisibility Handler"));
+		cmdList.put("Afk Handler",new AFKhandler(this, "Afk Handler"));
+		cmdList.put("Invisibility Handler",new InvisibilityHandler(this, "Invisibility Handler"));
 		cmdList.put("Join Handler",new JoinHandler(this,"Join Handler"));
 		cmdList.put("Quit Handler",new QuitHandler(this,"Quit Handler"));
-		cmdList.put("Protection Handler",new ProtectionHandler(this, new String[] {"watertoggle","lavatoggle"},"Protection Handler"));
-		cmdList.put("Inventory See Handler",new InventorySee(this, new String[] {"invsee","commitinventorychange"},"Inventory See Handler"));
+		cmdList.put("Protection Handler",new ProtectionHandler(this, "Protection Handler"));
+		cmdList.put("Inventory See Handler",new InventorySee(this, "Inventory See Handler"));
+		cmdList.put("BanHammer", new BanHammer(this, "BanHammer"));
 		System.out.print("-----PPPoPP initializing Handlers-----");
 		for(String string : cmdList.keySet()){
 			cmdList.get(string).initialize();

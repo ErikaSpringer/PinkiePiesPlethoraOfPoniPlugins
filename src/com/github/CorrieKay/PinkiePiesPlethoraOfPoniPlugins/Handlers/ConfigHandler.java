@@ -23,7 +23,7 @@ import com.github.CorrieKay.PinkiePiesPlethoraOfPoniPlugins.utils.PoniCommandExe
 public class ConfigHandler extends PoniCommandExecutor{
 	Mane instance;
 	public ConfigHandler(Mane instance, String name){
-		super(instance, new String[] {},name);
+		super(instance,name);
 		this.instance = instance;
 	}
 	/**
@@ -100,7 +100,31 @@ public class ConfigHandler extends PoniCommandExecutor{
         config.set("ipAddress", ip);
 		savePlayerConfig(config);
 		return config;
-	}	
+	}
+	public FileConfiguration createOfflinePlayerConfig(String name){
+		File file = new File(instance.getDataFolder()+File.separator+"players"+File.separator+name+".yml");
+		File folders = new File(instance.getDataFolder()+File.separator+"players");
+		if(!folders.exists()){
+			folders.mkdirs();
+		}
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			Bukkit.getLogger().severe("[PPPOPP] IO EXCEPTION: unable to create Player Configuration!");
+			e.printStackTrace();
+			return null;
+		}
+		FileConfiguration config = YamlConfiguration.loadConfiguration(instance.getResource("config.yml"));
+		config.set("name", name);
+		config.set("nickname", name);
+        if (!Bukkit.getServer().getOfflinePlayer(name).hasPlayedBefore()) {
+            config.set("firstLogon", getSystemDate());
+        } else {
+            config.set("firstLogon",getDateFromLong(Bukkit.getServer().getOfflinePlayer(name).getFirstPlayed()));
+        }
+        savePlayerConfig(config);
+        return config;
+	}
 	public String getSystemDate(){
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Calendar cal = Calendar.getInstance();

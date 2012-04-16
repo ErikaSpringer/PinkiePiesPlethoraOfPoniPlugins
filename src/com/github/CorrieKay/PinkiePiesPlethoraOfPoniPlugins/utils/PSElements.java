@@ -4,4 +4,5 @@ public enum PSElements {
 	MOTD,
 	RULES,
 	BANLIST,
+	WARPS,
 }

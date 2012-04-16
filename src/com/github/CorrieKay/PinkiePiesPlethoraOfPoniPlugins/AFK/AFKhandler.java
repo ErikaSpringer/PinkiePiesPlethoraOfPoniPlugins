@@ -26,6 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,8 +46,8 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 	protected final Map<Player,Integer> playerTick = new HashMap<Player,Integer>();
 	protected final ArrayList<Player> manuAFK = new ArrayList<Player>();
 	
-	public AFKhandler (Mane instance, String[] cmds, String name){
-		super(instance, cmds,name);
+	public AFKhandler (Mane instance, String name){
+		super(instance,name);
 	}
 	public void furtherInitialization(){
 		Bukkit.getScheduler().scheduleAsyncRepeatingTask(instance, new AfkTimerTask(this), 0, 20);
@@ -60,13 +61,17 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 		} else return false;
 	}
 	public void setAfk(Player player, boolean afk){
+		FileConfiguration config = instance.getConfigHandler().getPlayerConfig(player);
 		if(afk){
 			playerAfk.put(player, afk);
 			Bukkit.getServer().broadcastMessage(ChatColor.GRAY+player.getDisplayName()+ChatColor.GRAY+ " is now afk.");
+			config.set("afk", true);
 		} else {
 			playerAfk.remove(player);
 			Bukkit.getServer().broadcastMessage(ChatColor.GRAY+player.getDisplayName()+ChatColor.GRAY+" is no longer afk.");
+			config.set("afk", false);
 		}
+		instance.getConfigHandler().savePlayerConfig(config);
 	}
 	private void playerActivity(Player player){
 		if(playerTick.containsKey(player)){
@@ -85,18 +90,7 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 			return true;
 		}
 		Player player = (Player)sender;
-		if(cmd.getName().equals("afkdebug")){
-			for(Player player2 : playerAfk.keySet()){
-				player.sendMessage(player2.getName()+" is afk?: "+playerAfk.get(player2));
-			}
-			for(Player player2:playerTick.keySet()){
-				player.sendMessage(player2.getName()+" has "+playerTick.get(player2)+" seconds afk");
-			}
-			for(Player player2: manuAFK){
-				player.sendMessage(player2.getName()+" in manual afk");
-			}
-			return true;
-		}
+		FileConfiguration config = instance.getConfigHandler().getPlayerConfig(player);
 		if(instance.getInvisHandler().isHidden(player)){
 			player.sendMessage(ChatColor.GRAY+"Please dont mess with the AFK handler while invisible");
 			return true;
@@ -104,6 +98,8 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 		if (!manuAFK.contains(player)) {
 			if (!isAfk(player)) {
 				player.sendMessage(ChatColor.GRAY + player.getDisplayName()+ ChatColor.GRAY + " is now afk.");
+				config.set("afk", true);
+				instance.getConfigHandler().savePlayerConfig(config);
 			}
 			playerAfk.put(player, false);
 			playerTick.put(player, 0);
@@ -111,6 +107,8 @@ public class AFKhandler extends PoniCommandExecutor implements Listener, Command
 			return true;
 		} else {
 			player.sendMessage(ChatColor.GRAY+player.getDisplayName()+ChatColor.GRAY+" is no longer afk.");
+			config.set("afk",false);
+			instance.getConfigHandler().savePlayerConfig(config);
 			playerAfk.put(player, false);
 			playerTick.put(player, 0);
 			manuAFK.remove(player);
