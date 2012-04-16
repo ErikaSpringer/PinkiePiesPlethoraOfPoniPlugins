@@ -6,6 +6,7 @@ afk: false
 gamemode: 0
 invisible: false
 viewingInventory: false
+update: false
 nickname: new
 chatChannel: eq
 listenChannels:
@@ -15,13 +16,6 @@ horn:
   left: {}
   right: {}
   on: false
-ban:
-  banned: false
-  banReason: {}
-warnings:
-  warning1: {}
-  warning2: {}
-  warning3: {}
 firstLogon: n/a
 lastLogon: n/a
 lastLogout: n/a
@@ -31,4 +25,7 @@ warps:
     home: {}
     offline: {}
 inventory: {}
-update: false
+ban:
+  banned: false
+  banReason: {}
+warnings: {}

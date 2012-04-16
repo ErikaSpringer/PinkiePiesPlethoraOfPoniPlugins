@@ -50,6 +50,11 @@ commands:
         usage: /ban <player> <reason>
         permission: pppopp.ban
         executor: BanHammer
+    unban:
+        description: unbans a player
+        usage: /unban <player>
+        permission: pppopp.ban
+        executor: BanHammer
     kick:
         description: kicks a player
         usage: /kick <player> <reason>
@@ -64,6 +69,11 @@ commands:
         description: converts all bans into PPPOPP bans
         usage: /convertbans
         permission: pppopp.ban
+        executor: BanHammer
+    warnings:
+        description: gets your warnings
+        usage: /warnings
+        permission: pppopp.warnings
         executor: BanHammer
 permissions:
     pppopp.afk:
